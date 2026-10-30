@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="uk"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word Cards — Слова та 150 дієслів</title>
+<meta name="description" content="Персональний тренажер англійських слів: EN ↔ UA, автоматичні варіанти відповіді, власний словник і статистика.">
+<meta name="theme-color" content="#14263c">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%2314263c'/%3E%3Cpath d='m12 18 8 29 12-23 12 23 8-29' fill='none' stroke='%23d7f863' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#14263c;--muted:#58687b;--line:#d8e0e8;--canvas:#f3f6fa;--lime:#d7f863;
+  --blue:#e5edfb;--white:#fff;--green:#128a61;--green-soft:#e8f7f0;--red:#c84747;
+  --red-soft:#fff0f0;--shadow:0 16px 36px -25px #14263c45;
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--ink);background:var(--canvas);font-synthesis:none
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;display:flex;flex-direction:column;background:var(--canvas)}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default}
+[hidden]{display:none!important}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
+  outline:3px solid #4374c5;outline-offset:3px
+}
+.header{
+  height:78px;padding:0 max(5vw,22px);display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--line);background:var(--white);position:sticky;top:0;z-index:20
+}
+.brand{display:flex;align-items:center;text-decoration:none;color:inherit;font-size:24px;font-weight:760;letter-spacing:-1px}
+.brand-icon{
+  width:34px;height:38px;border-radius:8px;background:var(--ink);color:var(--lime);font-size:22px;
+  display:grid;place-items:center;margin-right:11px;transform:rotate(-6deg)
+}
+.brand-light{font-weight:400}.brand-dot{color:#637e20}
+.header-right{display:flex;align-items:center;gap:12px}
+.header-tag{font-size:13px;letter-spacing:1px;font-weight:650;color:var(--muted)}
+.header-tag span{color:#a4afbb;padding:0 5px}
+main{width:min(980px,calc(100% - 40px));margin:34px auto 54px;flex:1}
+.top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:24px}
+.eyebrow{font-size:12px;font-weight:750;letter-spacing:1.6px;color:var(--muted);margin:0 0 9px}
+h1{font-size:clamp(27px,4vw,38px);line-height:1.16;letter-spacing:-1.2px;margin:0 0 8px;font-weight:680}
+.intro{font-size:15px;line-height:1.5;color:var(--muted);margin:0}
+.button{
+  min-height:44px;padding:10px 17px;border-radius:10px;border:1px solid transparent;font-size:14px;
+  font-weight:680;transition:background .16s,transform .16s,border-color .16s;white-space:nowrap
+}
+.button:hover:not(:disabled){transform:translateY(-1px)}
+.primary{color:var(--ink);background:var(--lime)}
+.primary:hover{background:#caed4c}
+.secondary{background:var(--white);border-color:var(--line);color:var(--ink)}
+.secondary:hover{background:#eaf0f6}
+.ghost{border:0;background:transparent;color:var(--muted);padding-inline:8px}
+.ghost:hover{color:var(--ink);background:#eaf0f6}
+.danger{color:var(--red);border-color:#edcaca;background:#fff}
+.danger:hover{background:var(--red-soft)}
+.tabs{
+  display:flex;gap:7px;padding:6px;border:1px solid var(--line);border-radius:13px;background:var(--white);
+  margin-bottom:22px;overflow:auto
+}
+.tab{
+  flex:1;min-width:max-content;border:0;border-radius:9px;padding:10px 17px;background:transparent;color:var(--muted);
+  font-weight:680;font-size:14px
+}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff}
+.panel{animation:fade .16s ease}
+@keyframes fade{from{opacity:.5;transform:translateY(2px)}to{opacity:1;transform:none}}
+.study-shell{max-width:760px;margin:0 auto}
+.study-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 10px}
+.session-stats{display:flex;gap:12px;align-items:center;font-size:13px;color:var(--muted)}
+.session-stats strong{font-size:17px;color:var(--ink);font-variant-numeric:tabular-nums}
+.progress{height:4px;border-radius:5px;background:#dce4ec;overflow:hidden;margin-bottom:17px}
+.progress>div{height:100%;width:0;background:var(--ink);transition:width .22s}
+.quiz-card{
+  background:var(--white);border:1px solid #cfd9e5;border-radius:21px;box-shadow:var(--shadow);
+  overflow:hidden
+}
+.question-zone{min-height:205px;background:var(--blue);padding:25px 29px 24px;display:flex;flex-direction:column}
+.question-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.question-label{font-size:12px;letter-spacing:1.35px;font-weight:750;color:#5b6e89}
+.question-count{font-size:12px;color:#718093}
+.question{
+  margin:auto 0;text-align:center;padding:22px 8px;font-size:clamp(28px,6vw,48px);line-height:1.16;
+  letter-spacing:-1px;font-weight:620;overflow-wrap:anywhere
+}
+.answers-wrap{padding:23px 29px 17px}
+.answers-title{font-size:13px;color:var(--muted);font-weight:680;margin:0 0 12px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.answer{
+  min-height:62px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);
+  text-align:left;padding:12px 14px;display:flex;align-items:center;gap:12px;line-height:1.35;
+  transition:border-color .15s,background .15s,transform .15s
+}
+.answer:hover:not(:disabled){border-color:#8ea0b4;transform:translateY(-1px)}
+.answer:disabled{opacity:1}
+.answer.correct{border-color:#77c6a7;background:var(--green-soft)}
+.answer.wrong{border-color:#df9090;background:var(--red-soft)}
+.answer-key{
+  width:27px;height:27px;flex:0 0 27px;border-radius:50%;display:grid;place-items:center;background:#edf1f6;
+  color:#53647a;font-size:12px;font-weight:760
+}
+.answer.correct .answer-key{background:#ccebdd;color:#0b714c}
+.answer.wrong .answer-key{background:#f2cccc;color:#9b3030}
+.feedback{
+  border-top:1px solid var(--line);background:#f9fbfd;padding:15px 29px 17px;display:grid;
+  grid-template-columns:1fr auto;align-items:center;gap:15px
+}
+.feedback-main{min-width:0}
+.feedback-status{font-size:13px;font-weight:760;margin:0 0 5px}
+.feedback-status.ok{color:var(--green)}.feedback-status.bad{color:var(--red)}
+.feedback-answer{font-size:17px;font-weight:650;margin:0;overflow-wrap:anywhere}
+.forms{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:13px;color:var(--muted)
+}
+.form-chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 9px}
+.quiz-bottom{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 29px 22px
+}
+.dont-know{border:0;background:transparent;color:#596b82;font-weight:650;padding:10px 0}
+.dont-know:hover{color:var(--ink)}
+.keyboard{font-size:11px;color:#8a98a8;text-align:center;margin:11px 0 0}
+.settings-dialog,.edit-dialog{
+  width:min(650px,calc(100% - 28px));border:0;padding:0;border-radius:20px;background:transparent;
+  box-shadow:0 28px 70px #14263c40
+}
+.settings-dialog::backdrop,.edit-dialog::backdrop{background:#14263c66;backdrop-filter:blur(2px)}
+.dialog-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:27px}
+.dialog-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
+.dialog-head h2{margin:0;font-size:21px}
+.close{width:38px;height:38px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:22px;color:var(--muted)}
+.settings-group{border:0;padding:0;margin:0 0 22px}
+.settings-group legend{font-weight:700;font-size:14px;margin-bottom:11px}
+.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.choice{position:relative}
+.choice input{position:absolute;opacity:0}
+.choice span{
+  min-height:70px;border:1px solid var(--line);border-radius:11px;padding:12px;display:flex;flex-direction:column;
+  justify-content:center;gap:4px;cursor:pointer
+}
+.choice strong{font-size:14px}.choice small{font-size:12px;color:var(--muted);line-height:1.3}
+.choice input:checked+span{border-color:var(--ink);background:#f1f5f9}
+.switch-row{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;border-top:1px solid var(--line);
+  padding:17px 0
+}
+.switch-copy strong{display:block;font-size:14px;margin-bottom:3px}.switch-copy small{color:var(--muted);line-height:1.35}
+.switch{position:relative;width:46px;height:27px;flex:0 0 46px}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;border-radius:999px;background:#cbd4de;transition:.18s}
+.slider:before{content:"";position:absolute;width:21px;height:21px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.18s}
+.switch input:checked+.slider{background:var(--ink)}
+.switch input:checked+.slider:before{transform:translateX(19px);background:var(--lime)}
+.dialog-actions{display:flex;justify-content:flex-end;gap:9px;border-top:1px solid var(--line);padding-top:20px}
+.words-toolbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px
+}
+.search{
+  flex:1;min-height:44px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:9px 13px;
+  color:var(--ink);min-width:0
+}
+.toolbar-actions{display:flex;gap:8px}
+.word-count{font-size:13px;color:var(--muted);margin:0 0 11px}
+.table-wrap{background:#fff;border:1px solid var(--line);border-radius:17px;overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:13px 14px;border-bottom:1px solid #e6ebf0;text-align:left;vertical-align:middle}
+th{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#718093;background:#f8fafc}
+td{font-size:14px}
+tbody tr:last-child td{border-bottom:0}
+.word-en{font-size:16px;font-weight:680}
+.word-forms{color:var(--muted);font-size:12px}
+.stat-mini{color:var(--muted);font-size:12px;white-space:nowrap}
+.row-actions{display:flex;gap:5px;justify-content:flex-end}
+.icon-btn{border:1px solid var(--line);background:#fff;border-radius:8px;min-height:34px;padding:6px 9px;color:var(--muted)}
+.icon-btn:hover{background:#eef3f7;color:var(--ink)}
+.icon-btn.delete:hover{background:var(--red-soft);border-color:#edcaca;color:var(--red)}
+.empty{padding:42px 20px;text-align:center;color:var(--muted)}
+.add-layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.box{background:#fff;border:1px solid var(--line);border-radius:17px;padding:22px}
+.box h2{font-size:20px;margin:0 0 7px}.box-intro{font-size:13px;color:var(--muted);line-height:1.45;margin:0 0 19px}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:680}
+.field input,.field textarea{
+  width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);padding:10px 12px;
+  min-height:44px
+}
+.field textarea{min-height:220px;resize:vertical;line-height:1.5}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+details{margin:2px 0 15px;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+summary{cursor:pointer;font-size:13px;font-weight:680;color:var(--muted)}
+details .two{margin-top:12px}
+.form-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:5px}
+.form-note{font-size:12px;color:var(--muted);line-height:1.4}
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  background:var(--ink);color:#fff;border-radius:11px;padding:11px 15px;font-size:13px;box-shadow:0 12px 30px #14263c38;
+  transition:.22s;z-index:80;max-width:min(520px,calc(100% - 28px));text-align:center
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{
+  display:flex;justify-content:space-between;gap:18px;padding:22px max(5vw,22px);border-top:1px solid var(--line);
+  color:#768598;font-size:12px;background:#eef2f6
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:760px){
+  .header{height:64px;padding:0 15px}.brand{font-size:21px}.brand-icon{width:30px;height:34px;font-size:19px;margin-right:9px}
+  .header-tag{display:none}
+  main{width:calc(100% - 24px);margin:18px auto 34px}
+  .top-row{align-items:center;margin-bottom:17px}.intro{display:none}h1{font-size:25px;margin:0}.eyebrow{margin-bottom:5px;font-size:10px}
+  .top-row>.button{min-height:40px;padding:8px 12px;font-size:13px}
+  .tabs{margin-bottom:14px;position:sticky;top:72px;z-index:15}
+  .tab{padding:9px 12px}
+  .study-head{margin-bottom:7px}.session-stats{gap:8px;font-size:11px}.session-stats strong{font-size:15px}
+  .progress{margin-bottom:10px;height:3px}
+  .question-zone{min-height:135px;padding:16px 15px}
+  .question{padding:15px 4px;font-size:clamp(25px,8vw,35px)}
+  .question-label,.question-count{font-size:10px}
+  .answers-wrap{padding:13px 14px 11px}
+  .answers-title{font-size:11px;margin-bottom:8px}
+  .answers{grid-template-columns:1fr;gap:7px}
+  .answer{min-height:48px;padding:8px 10px;border-radius:9px;font-size:14px}
+  .answer-key{width:24px;height:24px;flex-basis:24px}
+  .feedback{padding:12px 14px;grid-template-columns:1fr auto}.feedback-answer{font-size:15px}.forms{gap:5px;font-size:11px}
+  .form-chip{padding:4px 7px}
+  .quiz-bottom{padding:0 14px 13px}.keyboard{display:none}
+  .choice-grid{grid-template-columns:1fr}.choice span{min-height:58px}
+  .dialog-card{padding:20px}
+  .words-toolbar{align-items:stretch;flex-direction:column}.toolbar-actions{display:grid;grid-template-columns:1fr 1fr}
+  .table-wrap{border-radius:12px}
+  .add-layout{grid-template-columns:1fr}.box{padding:17px}.two{grid-template-columns:1fr}
+  footer{display:none}
+}
+@media(max-width:410px){
+  .feedback{grid-template-columns:1fr}.feedback .button{width:100%}
+  .quiz-bottom{align-items:stretch;flex-direction:column-reverse}.dont-know{padding:5px 0}
+}
+.workspaces{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.workspace{display:flex;flex-direction:column;gap:5px;text-align:left;padding:17px 20px;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--ink)}
+.workspace strong{font-size:16px}.workspace small{font-size:12px;color:var(--muted);line-height:1.35}
+.workspace.active{border-color:var(--ink);background:var(--ink);color:#fff}.workspace.active small{color:#cedbe9}
+.empty-study p{line-height:1.6;color:var(--muted)}.empty-study .form-actions{flex-wrap:wrap}
+.verb-setup{display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:15px;padding:16px}
+.verb-setup .field{margin:0;flex:1;min-width:175px}
+.verb-setup #verb-history{flex:1 1 100%;margin:0;line-height:1.5}
+.verb-setup select{min-height:44px;border:1px solid var(--line);border-radius:9px;padding:9px;color:var(--ink);background:#fff;width:100%}
+.verb-score{flex-wrap:wrap;gap:8px 16px;margin:0 0 12px}.saved-errors{margin:0 0 16px;white-space:normal;text-align:left}
+.verb-card{border:1px solid #cfd9e5;border-radius:16px;background:var(--white);overflow:hidden}
+.verb-word{display:flex;flex-direction:column;align-items:center;gap:12px;padding:25px 16px;width:100%;border:0;background:var(--blue);color:var(--ink)}
+.verb-word>strong{font-size:clamp(28px,6vw,45px);line-height:1.2;overflow-wrap:anywhere;max-width:100%}
+.verb-word>span:last-child{font-size:12px;color:var(--muted)}
+.verb-word:disabled{opacity:1}.verb-word:disabled>span:last-child{display:none}
+.verb-answer{padding:20px}.verb-forms{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.verb-forms>div{display:flex;flex-direction:column;gap:7px}.verb-forms strong{font-size:clamp(20px,4vw,29px);line-height:1.25;overflow-wrap:anywhere}
+.verb-translation{border-top:1px solid var(--line);margin-top:18px;padding-top:15px}.verb-translation>p{margin:7px 0 0;line-height:1.5}
+.verb-input-form,.verb-examples{margin-top:14px;padding:18px}.verb-inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px}.verb-inputs .field{margin-bottom:12px;min-width:0}
+.verb-inputs input{font-size:18px;min-width:0}.verb-inputs input.is-correct{border:2px solid var(--green);background:var(--green-soft)}.verb-inputs input.is-wrong{border:2px solid var(--red);background:var(--red-soft)}
+.field-result{font-size:13px;line-height:1.4;margin:0;overflow-wrap:anywhere}.field-result:empty{display:none}.field-result.ok{color:var(--green)}.field-result.bad{color:var(--red)}
+.verb-examples h2{font-size:17px}.verb-example{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}.verb-example p{font-size:16px;line-height:1.6;margin:7px 0 0;overflow-wrap:anywhere}.verb-example strong{background:var(--blue);padding:1px 4px;border-radius:4px}
+.verb-navigation{display:flex;justify-content:space-between;gap:12px;margin-top:14px}.verb-navigation button{min-width:110px}
+.verb-complete{text-align:center;padding:35px 20px}.verb-complete>p{color:var(--muted);line-height:1.6}.complete-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+table{min-width:560px}
+@media(max-width:760px){.workspaces{gap:8px;margin-bottom:12px}.workspace{padding:12px}.workspace strong{font-size:14px}.workspace small{font-size:11px}.tabs{position:static}.verb-setup{padding:12px;gap:10px}.verb-setup .field{min-width:0;flex:1 1 calc(50% - 10px)}.verb-setup>.button{width:100%}.verb-word{padding:16px 12px;gap:7px}.verb-word>strong{font-size:30px}.verb-word>.question-label{font-size:10px}.verb-answer{padding:14px}.verb-forms{gap:12px}.verb-forms .question-label{font-size:10px;letter-spacing:.8px}.verb-input-form,.verb-examples{padding:13px;margin-top:10px}.verb-inputs input{font-size:17px}.verb-inputs label{font-size:12px}.verb-inputs{gap:10px}.verb-score{font-size:11px;gap:8px}.verb-score strong{font-size:15px}.verb-translation{padding-top:12px;margin-top:14px}.complete-actions{flex-direction:column}.header{position:static}.dialog-actions{flex-wrap:wrap}.dialog-actions .button{white-space:normal}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(max-width:760px){body.verbs-active .header{display:none}body.verbs-active main{margin-top:10px}body.verbs-active .top-row{justify-content:flex-end;margin-bottom:10px}body.verbs-active .top-row>div{display:none}.verb-word>.question-label,.verb-word>#verb-hint{display:none}.verb-word{padding:15px 12px}}
+
+.file-save{display:flex;align-items:center;justify-content:space-between;gap:18px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:14px 16px;margin-bottom:18px}
+#save-status{margin:0;font-size:14px;font-weight:650;line-height:1.4}.save-help{font-size:12px;color:var(--muted);line-height:1.5;margin:5px 0 0;max-width:660px}
+.file-save.has-changes{border-color:#a3b46b;background:#fcfff2}.speak-word{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-top:10px;font-size:13px;padding:8px 12px;white-space:normal;text-align:left}
+.speak-word:disabled{opacity:.5}.switch:has(input:focus-visible){outline:3px solid #4374c5;outline-offset:3px;border-radius:20px}
+@media(max-width:760px){.file-save{align-items:flex-start;gap:10px;padding:12px;margin-bottom:12px}.file-save .button{font-size:12px;padding:8px 10px;min-height:44px}.save-help{font-size:11px}#save-status{font-size:12px}body.verbs-active .save-help{display:none}.speak-word{font-size:12px}}
+
+</style>
+<script id="word-cards-data" type="application/json">{"version":2,"snapshotId":"wc-dmytro-20261027-portable","revision":1,"savedAt":"2026-10-28T16:06:40.366Z","words":[{"id":"w-mvfbvb92-s2qg5r","en":"predictions","translation":"прогнози","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004831784,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvfbvb93-uve3ny","en":"definitions","translation":"визначення","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793004619138,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvfbvb93-vhd1np","en":"selfish","translation":"егоїстичний","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004841632,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvfbvb94-pgjca2","en":"in-laws","translation":"родичі чоловіка/дружини","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004751486,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvfbvb95-scix7z","en":"it will be common","translation":"це стане поширеним явищем","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004746329,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvfcrhzh-ueqj1z","en":"spiky","translation":"гострий, колючий, стирчачий","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004820827,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvfcsu6m-lnrabe","en":"shape","translation":"форма","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004848578,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvgk9qj5-s2i4yj","en":"intention","translation":"намір","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793004599233,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvgk9yyp-t00a4j","en":"arrangement","translation":"домовленість","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793004585419,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe73-o2xmav","en":"admire","translation":"захоплюватися, милуватися","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004809277,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe74-h3tzbq","en":"compete","translation":"змагатися, конкурувати","past":"","participle":"","correct":2,"wrong":1,"streak":2,"lastSeen":1793004658195,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe75-giitgr","en":"jealous","translation":"заздрісний, ревнивий","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004823243,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe76-pq37gh","en":"desperately","translation":"відчайдушно, дуже сильно","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004837422,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe77-g52z0z","en":"separate","translation":"розходитися, розлучатися","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004844907,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe78-l3g17v","en":"get along (with)","translation":"ладнати (з кимось)","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793004605742,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe78-3jeec5","en":"get on (with)","translation":"ладнати (з кимось)","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004730356,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe79-41nnoz","en":"advantage","translation":"перевага","past":"","participle":"","correct":2,"wrong":1,"streak":2,"lastSeen":1793004655297,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7a-lqtx2z","en":"argument","translation":"суперечка, сварка","past":"","participle":"","correct":2,"wrong":1,"streak":2,"lastSeen":1793004652986,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7b-orbalh","en":"make up","translation":"миритися, помиритися","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793004572560,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7c-3laakz","en":"shy","translation":"сором'язливий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793004592835,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7c-qkzke3","en":"incredibly","translation":"неймовірно, надзвичайно","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004826154,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7d-mpbw0j","en":"demanding","translation":"вимогливий","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004733827,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7e-gz9r2e","en":"awful","translation":"жахливий, поганий","past":"","participle":"","correct":2,"wrong":1,"streak":2,"lastSeen":1793004665688,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7f-chx3up","en":"horrible","translation":"жахливий, огидний","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004739342,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7f-luwkzh","en":"pinch","translation":"щипати, ущипнути","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793004561703,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7g-li50c0","en":"attractive","translation":"привабливий","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004669338,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7h-l63w55","en":"complete","translation":"повний, цілковитий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793004542666,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7i-6zgln9","en":"suffer","translation":"страждати","past":"","participle":"","correct":2,"wrong":1,"streak":2,"lastSeen":1793004647321,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7j-dkzz1b","en":"blame","translation":"звинувачувати","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793004611409,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvoyhe7k-1jvojh","en":"age gap","translation":"різниця у віці","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004735881,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvozziuz-czqt5v","en":"quite","translation":"досить, достатньо, цілком","past":"","participle":"","correct":2,"wrong":1,"streak":1,"lastSeen":1793004742096,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp004l3-hs9h8b","en":"cut down","translation":"скоротити, зжинати","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004723804,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0ay94-vo8hou","en":"Geps","translation":"пропуски","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004718506,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0b3f4-om3uvd","en":"Cross out","translation":"викреслити","past":"","participle":"","correct":2,"wrong":2,"streak":1,"lastSeen":1793004662983,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0bmmr-fg4q3t","en":"Fill in","translation":"заповнювати","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004716557,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0bv6x-m2vckl","en":"carbohydrates","translation":"вуглеводи","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004714268,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0fleg-7kifwa","en":"occasionally","translation":"зрідка","past":"","participle":"","correct":2,"wrong":1,"streak":2,"lastSeen":1793004635923,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0fo9y-0uo2bm","en":"highlight","translation":"виділяти, підкреслювати","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004673441,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0fo9z-0bciwl","en":"peach","translation":"персик","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004676652,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0fo9z-imdddz","en":"lettuce","translation":"салат-латук, листовий салат","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004679872,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0fo9z-yfgdrd","en":"increase","translation":"збільшувати, зростати","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004689308,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0foa0-4jiq2t","en":"encourage","translation":"заохочувати, підбадьорювати","past":"","participle":"","correct":2,"wrong":1,"streak":2,"lastSeen":1793004630178,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0foa0-cicndv","en":"illness","translation":"хвороба, захворювання","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004693875,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0foa0-92j34k","en":"raw","translation":"сирий, необроблений","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004695751,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0foa1-fo4mon","en":"sour cream","translation":"сметана","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004697600,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0foa1-5upiri","en":"napkin","translation":"серветка","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004699251,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0foa1-06249y","en":"tablecloth","translation":"скатертина","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004702205,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0foa1-1hqeq9","en":"supplement","translation":"добавка, харчова добавка","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004706148,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0foa1-50a260","en":"steam","translation":"пара, готувати на парі","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004709257,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp0foa2-wetc2r","en":"main course","translation":"основна страва","past":"","participle":"","correct":2,"wrong":0,"streak":2,"lastSeen":1793004712014,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvp3xnsf-bgd7rz","en":"clever","translation":"розумний, кмітливий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118571392,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf231e-r6oo2g","en":"competitive","translation":"схильний до суперництва","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118523240,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf231f-f22mf7","en":"patient","translation":"терплячий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118683165,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf231f-5d8v2p","en":"lazy","translation":"лінивий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118890059,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf231f-yucws1","en":"reliable","translation":"надійний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118738942,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf231g-ttm9zs","en":"affectionate","translation":"лагідний, ніжний","past":"","participle":"","correct":1,"wrong":1,"streak":1,"lastSeen":1793118701570,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf231g-4fivtt","en":"organized","translation":"організований","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118868324,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf231g-0u65bj","en":"sociable","translation":"товариський, комунікабельний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118865848,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf231h-mbgr7h","en":"sensitive","translation":"чуйний, чутливий","past":"","participle":"","correct":0,"wrong":0,"streak":0,"lastSeen":0,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf231h-r5nw6b","en":"bossy","translation":"владний, любить командувати","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118541054,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf4tcd-t6jxv6","en":"stupid","translation":"дурний, нерозумний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118860009,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf4tcd-kkr326","en":"honest","translation":"чесний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118676523,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf4tce-k24po2","en":"dishonest","translation":"нечесний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118826376,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf4tce-ieui45","en":"talkative","translation":"балакучий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118699258,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf4tcf-ft0ku4","en":"quiet","translation":"мовчазний, тихий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118518616,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf4tcf-zq9fml","en":"generous","translation":"щедрий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118730117,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf4tcf-36zlm3","en":"friendly","translation":"дружелюбний, привітний","past":"","participle":"","correct":0,"wrong":0,"streak":0,"lastSeen":0,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf4tcg-rsiwol","en":"unfriendly","translation":"недружелюбний, непривітний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118885143,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf4tcg-c8jk0f","en":"kind","translation":"добрий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118764240,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf4tcg-dpdxcp","en":"unkind","translation":"недобрий, жорстокий","past":"","participle":"","correct":0,"wrong":0,"streak":0,"lastSeen":0,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf4tch-9a7od4","en":"impatient","translation":"нетерплячий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118555597,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvpf4tch-m4ajcw","en":"unselfish","translation":"безкорисливий, неегоїстичний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118752295,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpb5g2-4fm1pe","en":"behave","translation":"поводитися","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118535950,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpb5g2-ob2eye","en":"arguing","translation":"сперечатися, сваритися","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118514145,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpb5g3-g9f8wl","en":"common sense","translation":"здоровий глузд","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118743614,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpb5g3-mo98kg","en":"bad-tempered","translation":"запальний, дратівливий","past":"","participle":"","correct":1,"wrong":1,"streak":1,"lastSeen":1793118746680,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpb5g4-20yklg","en":"offended","translation":"ображений","past":"","participle":"","correct":1,"wrong":1,"streak":1,"lastSeen":1793118856152,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdlj-ajgsjz","en":"spoilt","translation":"розпещений","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118848333,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdlj-08sqnq","en":"aggressive","translation":"агресивний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118578854,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdlk-bleyn3","en":"charming","translation":"чарівний, привабливий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118687397,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdlk-b5wk1n","en":"sensible","translation":"розсудливий, практичний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118821549,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdll-e7roey","en":"manipulative","translation":"схильний до маніпуляцій","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118736322,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdll-7059cw","en":"moody","translation":"з мінливим настроєм, примхливий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118546135,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdlm-g5e8w7","en":"independent","translation":"незалежний, самостійний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118388410,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdlm-769mb5","en":"ambitious","translation":"амбітний, цілеспрямований","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793203440047,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdln-09446h","en":"unambitious","translation":"неамбіційний, без амбіцій","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118528945,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdln-ua17o1","en":"unimaginative","translation":"позбавлений уяви, без фантазії","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118873390,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdln-jmzacu","en":"disorganized","translation":"неорганізований","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118863140,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdlo-dadifc","en":"unreliable","translation":"ненадійний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118568351,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdlo-us7vxw","en":"irresponsible","translation":"безвідповідальний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118831395,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdlp-nhvtos","en":"insensitive","translation":"нечутливий, байдужий","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118575366,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdlp-nqg5rb","en":"unsociable","translation":"нетовариський","past":"","participle":"","correct":0,"wrong":0,"streak":0,"lastSeen":0,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"w-mvqpbdlq-6xbz9f","en":"untidy","translation":"неохайний","past":"","participle":"","correct":1,"wrong":0,"streak":1,"lastSeen":1793118758651,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false}],"verbs":[{"id":"seed-1","en":"arise","translation":"виникати, з’являтися","past":"arose","participle":"arisen","correct":8,"wrong":0,"streak":8,"lastSeen":1792406848208,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-2","en":"awake","translation":"прокидатися, будити","past":"awoke","participle":"awoken","correct":5,"wrong":0,"streak":5,"lastSeen":1791363202958,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-3","en":"be","translation":"бути","past":"was / were","participle":"been","correct":8,"wrong":0,"streak":8,"lastSeen":1792406869896,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-4","en":"bear","translation":"нести, витримувати, народжувати","past":"bore","participle":"borne / born","correct":5,"wrong":0,"streak":5,"lastSeen":1792406327663,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-5","en":"beat","translation":"бити","past":"beat","participle":"beaten","correct":7,"wrong":0,"streak":7,"lastSeen":1791896764354,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-6","en":"become","translation":"ставати","past":"became","participle":"become","correct":5,"wrong":0,"streak":5,"lastSeen":1791896419459,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-7","en":"begin","translation":"починати","past":"began","participle":"begun","correct":7,"wrong":0,"streak":7,"lastSeen":1791896448705,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-8","en":"bet","translation":"битися об заклад","past":"bet","participle":"bet","correct":4,"wrong":0,"streak":4,"lastSeen":1791896974406,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-9","en":"bind","translation":"зв’язувати","past":"bound","participle":"bound","correct":9,"wrong":2,"streak":5,"lastSeen":1791896666816,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-10","en":"bite","translation":"кусати, кусатися","past":"bit","participle":"bitten","correct":3,"wrong":0,"streak":3,"lastSeen":1791896838930,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-11","en":"bleed","translation":"кровоточити","past":"bled","participle":"bled","correct":5,"wrong":0,"streak":5,"lastSeen":1792406605518,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-12","en":"blow","translation":"дути","past":"blew","participle":"blown","correct":6,"wrong":0,"streak":6,"lastSeen":1792406935485,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-13","en":"break","translation":"ламати","past":"broke","participle":"broken","correct":4,"wrong":0,"streak":4,"lastSeen":1791896772718,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-14","en":"breed","translation":"розводити","past":"bred","participle":"bred","correct":5,"wrong":1,"streak":4,"lastSeen":1792406417009,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-15","en":"bring","translation":"приносити","past":"brought","participle":"brought","correct":8,"wrong":0,"streak":8,"lastSeen":1792406777988,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-16","en":"build","translation":"будувати","past":"built","participle":"built","correct":6,"wrong":0,"streak":6,"lastSeen":1792406919652,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-17","en":"burn","translation":"палити, горіти","past":"burnt / burned","participle":"burnt / burned","correct":7,"wrong":0,"streak":7,"lastSeen":1792406785578,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-18","en":"burst","translation":"вибухати, розриватися","past":"burst","participle":"burst","correct":7,"wrong":0,"streak":7,"lastSeen":1792406183806,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-19","en":"buy","translation":"купувати","past":"bought","participle":"bought","correct":6,"wrong":0,"streak":6,"lastSeen":1792406480459,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-20","en":"cast","translation":"кидати","past":"cast","participle":"cast","correct":10,"wrong":1,"streak":10,"lastSeen":1792406800836,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-21","en":"catch","translation":"ловити","past":"caught","participle":"caught","correct":2,"wrong":0,"streak":2,"lastSeen":1791362776506,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-22","en":"choose","translation":"вибирати","past":"chose","participle":"chosen","correct":5,"wrong":0,"streak":5,"lastSeen":1791364179091,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-23","en":"come","translation":"приходити","past":"came","participle":"come","correct":3,"wrong":0,"streak":3,"lastSeen":1791896540731,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-24","en":"cost","translation":"коштувати","past":"cost","participle":"cost","correct":6,"wrong":0,"streak":6,"lastSeen":1792406307083,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-25","en":"cut","translation":"різати","past":"cut","participle":"cut","correct":7,"wrong":0,"streak":7,"lastSeen":1792406536099,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-26","en":"dare","translation":"сміти, наважуватися","past":"dared","participle":"dared","correct":5,"wrong":1,"streak":2,"lastSeen":1791896593940,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-27","en":"deal","translation":"мати справу","past":"dealt","participle":"dealt","correct":8,"wrong":0,"streak":8,"lastSeen":1791896859987,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-28","en":"dig","translation":"копати, рити","past":"dug","participle":"dug","correct":5,"wrong":0,"streak":5,"lastSeen":1791363267770,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-29","en":"do","translation":"робити","past":"did","participle":"done","correct":5,"wrong":0,"streak":5,"lastSeen":1791895901014,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-30","en":"draw","translation":"малювати, креслити, тягти","past":"drew","participle":"drawn","correct":5,"wrong":0,"streak":5,"lastSeen":1792406012274,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-31","en":"dream","translation":"мріяти, бачити сон","past":"dreamt","participle":"dreamt","correct":5,"wrong":0,"streak":5,"lastSeen":1792406113044,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-32","en":"drink","translation":"пити","past":"drank","participle":"drunk","correct":3,"wrong":0,"streak":3,"lastSeen":1792406083297,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-33","en":"drive","translation":"водити, керувати","past":"drove","participle":"driven","correct":4,"wrong":0,"streak":4,"lastSeen":1792406615050,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-34","en":"dwell","translation":"жити, мешкати","past":"dwelt","participle":"dwelt","correct":5,"wrong":0,"streak":5,"lastSeen":1792406923895,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-35","en":"eat","translation":"їсти","past":"ate","participle":"eaten","correct":3,"wrong":0,"streak":3,"lastSeen":1791364199752,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-36","en":"fall","translation":"падати","past":"fell","participle":"fallen","correct":7,"wrong":0,"streak":7,"lastSeen":1791896659551,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-37","en":"feed","translation":"годувати","past":"fed","participle":"fed","correct":10,"wrong":0,"streak":10,"lastSeen":1792406770586,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-38","en":"feel","translation":"відчувати","past":"felt","participle":"felt","correct":5,"wrong":0,"streak":5,"lastSeen":1791896742692,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-39","en":"fight","translation":"боротися","past":"fought","participle":"fought","correct":5,"wrong":0,"streak":5,"lastSeen":1792406792071,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-40","en":"find","translation":"знаходити","past":"found","participle":"found","correct":5,"wrong":0,"streak":5,"lastSeen":1792406102147,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-41","en":"fly","translation":"літати","past":"flew","participle":"flown","correct":5,"wrong":0,"streak":5,"lastSeen":1792406447850,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-42","en":"forbid","translation":"забороняти","past":"forbade","participle":"forbidden","correct":7,"wrong":0,"streak":7,"lastSeen":1792406391146,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-43","en":"forecast","translation":"прогнозувати, передбачати","past":"forecast","participle":"forecast","correct":5,"wrong":0,"streak":5,"lastSeen":1791896298721,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-44","en":"foresee","translation":"передбачати","past":"foresaw","participle":"foreseen","correct":6,"wrong":0,"streak":6,"lastSeen":1792406908637,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-45","en":"forget","translation":"забувати","past":"forgot","participle":"forgotten","correct":8,"wrong":0,"streak":8,"lastSeen":1791896868315,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-46","en":"forgive","translation":"прощати","past":"forgave","participle":"forgiven","correct":7,"wrong":0,"streak":7,"lastSeen":1792406530586,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-47","en":"freeze","translation":"заморожувати, замерзати","past":"froze","participle":"frozen","correct":6,"wrong":0,"streak":6,"lastSeen":1792406947224,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-48","en":"get","translation":"отримувати","past":"got","participle":"got","correct":11,"wrong":0,"streak":11,"lastSeen":1791896720906,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-49","en":"give","translation":"давати","past":"gave","participle":"given","correct":5,"wrong":0,"streak":5,"lastSeen":1792406905747,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-50","en":"go","translation":"ходити, йти","past":"went","participle":"gone","correct":5,"wrong":0,"streak":5,"lastSeen":1791362823146,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-51","en":"grow","translation":"рости, вирощувати","past":"grew","participle":"grown","correct":6,"wrong":0,"streak":6,"lastSeen":1792406409927,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-52","en":"hang","translation":"вішати, висіти","past":"hung","participle":"hung","correct":5,"wrong":1,"streak":3,"lastSeen":1791364205391,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-53","en":"have","translation":"мати","past":"had","participle":"had","correct":5,"wrong":0,"streak":5,"lastSeen":1792406844733,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-54","en":"hear","translation":"чути","past":"heard","participle":"heard","correct":6,"wrong":0,"streak":6,"lastSeen":1792406690602,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-55","en":"hide","translation":"ховати, ховатися","past":"hid","participle":"hidden","correct":4,"wrong":0,"streak":4,"lastSeen":1791896487940,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-56","en":"hit","translation":"ударяти","past":"hit","participle":"hit","correct":8,"wrong":1,"streak":7,"lastSeen":1792406523646,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-57","en":"hold","translation":"тримати","past":"held","participle":"held","correct":5,"wrong":0,"streak":5,"lastSeen":1792406167411,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-58","en":"hurt","translation":"поранити, завдати болю","past":"hurt","participle":"hurt","correct":4,"wrong":0,"streak":4,"lastSeen":1791362974611,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-59","en":"keep","translation":"тримати, зберігати","past":"kept","participle":"kept","correct":2,"wrong":0,"streak":2,"lastSeen":1791283751339,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-60","en":"kneel","translation":"стояти навколішки","past":"knelt","participle":"knelt","correct":5,"wrong":0,"streak":5,"lastSeen":1791896082888,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-61","en":"knit","translation":"в’язати, з’єднувати","past":"knit / knitted","participle":"knit / knitted","correct":7,"wrong":2,"streak":3,"lastSeen":1792406512020,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-62","en":"know","translation":"знати","past":"knew","participle":"known","correct":8,"wrong":0,"streak":8,"lastSeen":1791896953445,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-63","en":"lay","translation":"класти","past":"laid","participle":"laid","correct":7,"wrong":0,"streak":7,"lastSeen":1792406705986,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-64","en":"lead","translation":"вести, керувати","past":"led","participle":"led","correct":10,"wrong":1,"streak":4,"lastSeen":1792406795556,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-65","en":"lean","translation":"нахиляти, нахилятися","past":"leant / leaned","participle":"leant / leaned","correct":7,"wrong":0,"streak":7,"lastSeen":1792406858281,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-66","en":"leap","translation":"стрибати","past":"leapt","participle":"leapt","correct":8,"wrong":2,"streak":2,"lastSeen":1792406942792,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-67","en":"learn","translation":"вчити, вивчати","past":"learnt","participle":"learnt","correct":5,"wrong":0,"streak":5,"lastSeen":1791896638822,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-68","en":"leave","translation":"залишати","past":"left","participle":"left","correct":4,"wrong":0,"streak":4,"lastSeen":1791896987706,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-69","en":"lend","translation":"позичати комусь","past":"lent","participle":"lent","correct":7,"wrong":0,"streak":7,"lastSeen":1791363641425,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-70","en":"let","translation":"дозволяти, пускати","past":"let","participle":"let","correct":7,"wrong":0,"streak":7,"lastSeen":1792405946696,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-71","en":"lie","translation":"лежати","past":"lay","participle":"lain","correct":7,"wrong":0,"streak":7,"lastSeen":1792406662956,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-72","en":"light","translation":"запалювати","past":"lit","participle":"lit","correct":6,"wrong":0,"streak":6,"lastSeen":1792406761940,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-73","en":"lose","translation":"губити, втрачати","past":"lost","participle":"lost","correct":3,"wrong":0,"streak":3,"lastSeen":1791362783557,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-74","en":"make","translation":"робити, виготовляти","past":"made","participle":"made","correct":8,"wrong":0,"streak":8,"lastSeen":1792406254575,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-75","en":"mean","translation":"означати","past":"meant","participle":"meant","correct":3,"wrong":0,"streak":3,"lastSeen":1791363648093,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-76","en":"meet","translation":"зустрічати","past":"met","participle":"met","correct":9,"wrong":0,"streak":9,"lastSeen":1792406374966,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-77","en":"mislead","translation":"вводити в оману","past":"misled","participle":"misled","correct":8,"wrong":1,"streak":1,"lastSeen":1792406864836,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-78","en":"misspell","translation":"робити орфографічні помилки","past":"misspelt","participle":"misspelt","correct":7,"wrong":0,"streak":7,"lastSeen":1792406383325,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-79","en":"misunderstand","translation":"неправильно розуміти","past":"misunderstood","participle":"misunderstood","correct":6,"wrong":0,"streak":6,"lastSeen":1792406222501,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-80","en":"overcome","translation":"долати, перемагати","past":"overcame","participle":"overcome","correct":5,"wrong":1,"streak":4,"lastSeen":1791896757945,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-81","en":"partake","translation":"брати участь; споживати їжу чи напої","past":"partook","participle":"partaken","correct":3,"wrong":0,"streak":3,"lastSeen":1791283794761,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-82","en":"pay","translation":"платити","past":"paid","participle":"paid","correct":6,"wrong":0,"streak":6,"lastSeen":1792406880956,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-83","en":"prove","translation":"доводити","past":"proved","participle":"proved / proven","correct":10,"wrong":1,"streak":8,"lastSeen":1792406467862,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-84","en":"put","translation":"класти","past":"put","participle":"put","correct":5,"wrong":0,"streak":5,"lastSeen":1791363869738,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-85","en":"read","translation":"читати","past":"read","participle":"read","correct":6,"wrong":0,"streak":6,"lastSeen":1791896526584,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-86","en":"rebuild","translation":"відбудовувати","past":"rebuilt","participle":"rebuilt","correct":5,"wrong":0,"streak":5,"lastSeen":1792406437905,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-87","en":"retell","translation":"переказувати","past":"retold","participle":"retold","correct":9,"wrong":0,"streak":9,"lastSeen":1792406378983,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-88","en":"rewrite","translation":"переписувати","past":"rewrote","participle":"rewritten","correct":8,"wrong":0,"streak":8,"lastSeen":1792406597307,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-89","en":"rid","translation":"звільняти, позбавляти","past":"rid","participle":"rid","correct":7,"wrong":1,"streak":6,"lastSeen":1792406902211,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-90","en":"ride","translation":"їхати верхи, їздити","past":"rode","participle":"ridden","correct":2,"wrong":0,"streak":2,"lastSeen":1792406442049,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-91","en":"ring","translation":"дзвонити","past":"rang","participle":"rung","correct":5,"wrong":0,"streak":5,"lastSeen":1792406228330,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-92","en":"rise","translation":"підніматися, сходити, вставати","past":"rose","participle":"risen","correct":7,"wrong":3,"streak":4,"lastSeen":1791896876982,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-93","en":"run","translation":"бігти","past":"ran","participle":"run","correct":7,"wrong":0,"streak":7,"lastSeen":1792406774295,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-94","en":"say","translation":"казати","past":"said","participle":"said","correct":6,"wrong":0,"streak":6,"lastSeen":1792406930731,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-95","en":"see","translation":"бачити","past":"saw","participle":"seen","correct":10,"wrong":0,"streak":10,"lastSeen":1791896779439,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-96","en":"seek","translation":"шукати","past":"sought","participle":"sought","correct":7,"wrong":0,"streak":7,"lastSeen":1792406302734,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-97","en":"sell","translation":"продавати","past":"sold","participle":"sold","correct":10,"wrong":1,"streak":8,"lastSeen":1792406590431,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-98","en":"send","translation":"відсилати","past":"sent","participle":"sent","correct":6,"wrong":0,"streak":6,"lastSeen":1792406734329,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-99","en":"set","translation":"ставити, розміщувати","past":"set","participle":"set","correct":7,"wrong":0,"streak":7,"lastSeen":1792406475183,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-100","en":"shake","translation":"трусити","past":"shook","participle":"shaken","correct":6,"wrong":0,"streak":6,"lastSeen":1792406684608,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-101","en":"shine","translation":"світити, блищати","past":"shone","participle":"shone","correct":2,"wrong":0,"streak":2,"lastSeen":1791361540410,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-102","en":"shoot","translation":"стріляти","past":"shot","participle":"shot","correct":4,"wrong":0,"streak":4,"lastSeen":1792406109710,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-103","en":"show","translation":"показувати","past":"showed","participle":"shown / showed","correct":6,"wrong":0,"streak":6,"lastSeen":1791895966418,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-104","en":"shut","translation":"закривати, закриватися","past":"shut","participle":"shut","correct":9,"wrong":1,"streak":9,"lastSeen":1792406899111,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-105","en":"sing","translation":"співати","past":"sang","participle":"sung","correct":3,"wrong":0,"streak":3,"lastSeen":1791896699375,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-106","en":"sink","translation":"тонути","past":"sank","participle":"sunk / sunken","correct":7,"wrong":1,"streak":4,"lastSeen":1792406398690,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-107","en":"sit","translation":"сидіти","past":"sat","participle":"sat","correct":4,"wrong":0,"streak":4,"lastSeen":1792406245206,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-108","en":"sleep","translation":"спати","past":"slept","participle":"slept","correct":4,"wrong":0,"streak":4,"lastSeen":1791896693941,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-109","en":"slide","translation":"ковзати","past":"slid","participle":"slid","correct":6,"wrong":0,"streak":6,"lastSeen":1792406118096,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-110","en":"smell","translation":"відчувати запах","past":"smelt / smelled","participle":"smelt / smelled","correct":4,"wrong":0,"streak":4,"lastSeen":1791363459681,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-111","en":"sow","translation":"сіяти","past":"sowed","participle":"sown / sowed","correct":8,"wrong":1,"streak":8,"lastSeen":1792406912400,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-112","en":"speak","translation":"розмовляти","past":"spoke","participle":"spoken","correct":7,"wrong":0,"streak":7,"lastSeen":1791896703480,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-113","en":"speed","translation":"поспішати","past":"sped","participle":"sped","correct":7,"wrong":0,"streak":7,"lastSeen":1792406806202,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-114","en":"spell","translation":"називати або писати по літерах","past":"spelt / spelled","participle":"spelt / spelled","correct":6,"wrong":0,"streak":6,"lastSeen":1792406552528,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-115","en":"spend","translation":"витрачати","past":"spent","participle":"spent","correct":7,"wrong":0,"streak":7,"lastSeen":1792406260935,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-116","en":"spill","translation":"розливати","past":"spilt / spilled","participle":"spilt / spilled","correct":9,"wrong":1,"streak":8,"lastSeen":1792406952088,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-117","en":"spin","translation":"прясти, обертати","past":"spun","participle":"spun","correct":4,"wrong":1,"streak":3,"lastSeen":1792406218109,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-118","en":"spoil","translation":"псувати","past":"spoilt / spoiled","participle":"spoilt / spoiled","correct":4,"wrong":1,"streak":2,"lastSeen":1792406540930,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-119","en":"spread","translation":"поширювати, простягати","past":"spread","participle":"spread","correct":7,"wrong":1,"streak":6,"lastSeen":1792406318712,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-120","en":"spring","translation":"стрибати","past":"sprang","participle":"sprung","correct":5,"wrong":0,"streak":5,"lastSeen":1792406570516,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-121","en":"stand","translation":"стояти","past":"stood","participle":"stood","correct":5,"wrong":0,"streak":5,"lastSeen":1792406653736,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-122","en":"steal","translation":"красти","past":"stole","participle":"stolen","correct":9,"wrong":1,"streak":7,"lastSeen":1791364024292,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-123","en":"stick","translation":"прилипати; дотримуватися","past":"stuck","participle":"stuck","correct":9,"wrong":0,"streak":9,"lastSeen":1792406746258,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-124","en":"stride","translation":"крокувати","past":"strode","participle":"stridden","correct":12,"wrong":2,"streak":10,"lastSeen":1792406890442,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-125","en":"strike","translation":"бити, страйкувати","past":"struck","participle":"struck","correct":4,"wrong":0,"streak":4,"lastSeen":1792406429961,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-126","en":"string","translation":"нанизувати, натягувати","past":"strung","participle":"strung","correct":10,"wrong":2,"streak":2,"lastSeen":1792406155105,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-127","en":"strive","translation":"намагатися, старатися","past":"strove","participle":"striven","correct":4,"wrong":1,"streak":0,"lastSeen":1792406961588,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-128","en":"sunburn","translation":"обгоріти на сонці","past":"sunburned","participle":"sunburned","correct":5,"wrong":0,"streak":5,"lastSeen":1791896502070,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-129","en":"sweep","translation":"підмітати","past":"swept","participle":"swept","correct":10,"wrong":1,"streak":9,"lastSeen":1792406134700,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-130","en":"swim","translation":"плавати","past":"swam","participle":"swum","correct":6,"wrong":0,"streak":6,"lastSeen":1792406234737,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-131","en":"swing","translation":"коливатися, хитати","past":"swung","participle":"swung","correct":5,"wrong":0,"streak":5,"lastSeen":1792406727782,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-132","en":"take","translation":"брати","past":"took","participle":"taken","correct":4,"wrong":0,"streak":4,"lastSeen":1792406279908,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-133","en":"teach","translation":"навчати","past":"taught","participle":"taught","correct":8,"wrong":0,"streak":8,"lastSeen":1792406548170,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-134","en":"tear","translation":"рвати","past":"tore","participle":"torn","correct":4,"wrong":0,"streak":4,"lastSeen":1792406636680,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-135","en":"tell","translation":"казати, розповідати","past":"told","participle":"told","correct":7,"wrong":0,"streak":7,"lastSeen":1792406500795,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-136","en":"think","translation":"думати","past":"thought","participle":"thought","correct":7,"wrong":0,"streak":7,"lastSeen":1792406267716,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-137","en":"throw","translation":"кидати","past":"threw","participle":"thrown","correct":8,"wrong":0,"streak":8,"lastSeen":1792406874807,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-138","en":"undergo","translation":"зазнавати","past":"underwent","participle":"undergone","correct":9,"wrong":0,"streak":9,"lastSeen":1792406837738,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-139","en":"understand","translation":"розуміти","past":"understood","participle":"understood","correct":3,"wrong":0,"streak":3,"lastSeen":1791896814527,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-140","en":"undo","translation":"розв’язувати, розстібати, скасовувати","past":"undid","participle":"undone","correct":8,"wrong":2,"streak":7,"lastSeen":1791896371082,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-141","en":"upset","translation":"засмучувати","past":"upset","participle":"upset","correct":6,"wrong":0,"streak":6,"lastSeen":1792406594532,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-142","en":"wake","translation":"будити, прокидатися","past":"woke","participle":"woken","correct":4,"wrong":0,"streak":4,"lastSeen":1792406043063,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-143","en":"wear","translation":"носити","past":"wore","participle":"worn","correct":7,"wrong":0,"streak":7,"lastSeen":1792406125056,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-144","en":"weep","translation":"плакати","past":"wept","participle":"wept","correct":8,"wrong":1,"streak":6,"lastSeen":1792406585307,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-145","en":"win","translation":"перемагати","past":"won","participle":"won","correct":5,"wrong":0,"streak":5,"lastSeen":1792406741715,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-146","en":"wind","translation":"заводити годинник, намотувати","past":"wound","participle":"wound","correct":9,"wrong":1,"streak":8,"lastSeen":1792406766653,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-147","en":"withdraw","translation":"відкликати, знімати кошти","past":"withdrew","participle":"withdrawn","correct":2,"wrong":0,"streak":2,"lastSeen":1791361478909,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-148","en":"write","translation":"писати","past":"wrote","participle":"written","correct":3,"wrong":0,"streak":3,"lastSeen":1791362175370,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-149","en":"shrink","translation":"стискатися, зменшуватися","past":"shrank","participle":"shrunk","correct":8,"wrong":2,"streak":7,"lastSeen":1792406626811,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false},{"id":"seed-150","en":"split","translation":"розділяти, розколювати","past":"split","participle":"split","correct":6,"wrong":0,"streak":6,"lastSeen":1792406824009,"formsCorrect":0,"formsWrong":0,"formsStreak":0,"formsLastSeen":0,"formsMistake":false}],"prefs":{"direction":"mix","smart":true,"speakCorrect":true,"verbMode":"writing","verbOrder":"sequential"}}</script>
+</head>
+<body>
+<header class="header">
+  <a class="brand" href="#" data-tab-link="study" aria-label="Word Cards — навчання">
+    <span class="brand-icon">W</span>word<span class="brand-light">cards</span><span class="brand-dot">.</span>
+  </a>
+  <div class="header-right">
+    <span class="header-tag">EN <span>/</span> UA</span>
+  </div>
+</header>
+
+<main>
+  <div class="top-row">
+    <div>
+      <p class="eyebrow">АНГЛІЙСЬКА · СЛОВНИК</p>
+      <h1 id="page-title">Мої слова</h1>
+      <p id="page-intro" class="intro">Додавай незнайомі слова й повторюй їх в обидва боки.</p>
+    </div>
+    <button id="settings-open" class="button secondary" type="button">Налаштування</button>
+  </div>
+
+  <section class="file-save" aria-label="Збереження словника"><div><p id="save-status" role="status" aria-live="polite"></p><p class="save-help">Після додавання слів і практики збережи нову HTML-копію. Вона містить слова та статистику й відкривається на іншому пристрої. Браузер тримає лише додаткову резервну копію.</p></div><button id="save-html" class="button primary" type="button">Зберегти HTML</button></section>
+  <div class="workspaces" role="group" aria-label="Що вивчаємо">
+    <button class="workspace active" data-workspace="vocabulary" type="button" aria-pressed="true"><strong>Слова і переклад</strong><small>Мій словниковий запас</small></button>
+    <button class="workspace" data-workspace="verbs" type="button" aria-pressed="false"><strong>150 дієслів</strong><small>Окрема практика трьох форм</small></button>
+  </div>
+  <nav id="vocabulary-tabs" class="tabs" aria-label="Розділи">
+    <button class="tab" type="button" data-tab="study" aria-selected="true">Вчити</button>
+    <button class="tab" type="button" data-tab="words" aria-selected="false">Мої слова</button>
+    <button class="tab" type="button" data-tab="add" aria-selected="false">Додати</button>
+  </nav>
+
+  <section id="panel-study" class="panel">
+    <div class="study-shell">
+      <div id="vocab-empty" class="box empty-study" hidden=""><h2>Почни зі своїх слів</h2><p id="empty-description">Додай слова з книги або імпортуй попередню резервну копію. Стартові 150 дієслів навчаються окремо.</p><div class="form-actions"><button type="button" class="button primary" data-tab-link="add">Додати слова</button><button type="button" class="button secondary" id="empty-import">Імпорт JSON</button></div></div>
+      <div id="vocab-training">
+      <div class="study-head">
+        <div class="session-stats">
+          <span>Відповіді <strong id="answered-count">0</strong></span>
+          <span>Правильно <strong id="correct-count">0</strong></span>
+          <span>Точність <strong id="accuracy">—</strong></span>
+        </div>
+        <button id="restart-session" class="button ghost" type="button">Нова сесія</button>
+      </div>
+      <div class="progress" aria-hidden="true"><div id="accuracy-bar"></div></div>
+
+      <article class="quiz-card" aria-live="polite">
+        <div class="question-zone">
+          <div class="question-top">
+            <span id="question-label" class="question-label">ПЕРЕКЛАД → ENGLISH</span>
+            <span id="question-count" class="question-count"></span>
+          </div>
+          <div id="question" class="question"></div>
+        </div>
+
+        <div class="answers-wrap">
+          <p class="answers-title">Вибери відповідь</p>
+          <div id="answers" class="answers"></div>
+        </div>
+
+        <div id="feedback" class="feedback" hidden="">
+          <div class="feedback-main">
+            <p id="feedback-status" class="feedback-status"></p>
+            <p id="feedback-answer" class="feedback-answer"></p>
+            <div id="forms" class="forms"></div><button id="speak-word" class="button secondary speak-word" type="button"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4zM17 8a6 6 0 0 1 0 8M20 5a10 10 0 0 1 0 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg>Прослухати ще раз</button>
+          </div>
+          <button id="next-question" class="button primary" type="button">Далі</button>
+        </div>
+
+        <div id="quiz-bottom" class="quiz-bottom">
+          <button id="dont-know" class="dont-know" type="button">Не знаю</button>
+          <span></span>
+        </div>
+      </article>
+      <p class="keyboard">1–4 — відповідь · Enter — далі</p></div>
+    </div>
+  </section>
+
+  <section id="panel-words" class="panel" hidden="">
+    <div class="words-toolbar">
+      <input id="search" class="search" type="search" placeholder="Пошук: English або переклад…" autocomplete="off">
+      <div class="toolbar-actions">
+        <button id="export" class="button secondary" type="button">Експорт</button>
+        <button id="import-button" class="button secondary" type="button">Імпорт</button>
+        <input id="import-file" type="file" accept=".json,application/json" hidden="">
+      </div>
+    </div>
+    <p class="box-intro">Тільки твоя лексика. Стартові 150 дієслів не беруть участі в цій практиці.</p><p id="word-count" class="word-count"></p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>English</th><th>Переклад</th><th>Статистика</th><th></th></tr></thead>
+        <tbody id="word-list"></tbody>
+      </table>
+      <div id="word-empty" class="empty" hidden="">Нічого не знайдено.</div>
+    </div>
+  </section>
+
+  <section id="panel-add" class="panel" hidden="">
+    <div class="add-layout">
+      <form id="add-form" class="box">
+        <h2>Додати слово</h2>
+        <p class="box-intro">Додавай слова та вирази з читання. Вони повторюватимуться окремо від стартових 150 дієслів.</p>
+        <div class="field">
+          <label for="new-en">English</label>
+          <input id="new-en" name="en" required="" autocomplete="off" placeholder="quite">
+        </div>
+        <div class="field">
+          <label for="new-translation">Переклад</label>
+          <input id="new-translation" name="translation" required="" autocomplete="off" placeholder="досить, доволі, цілком">
+        </div>
+        <div class="form-actions">
+          <span class="form-note">Якщо слово вже є, його дані оновляться.</span>
+          <button class="button primary" type="submit">Додати</button>
+        </div>
+      </form>
+
+      <form id="bulk-form" class="box">
+        <h2>Додати списком</h2>
+        <p class="box-intro">По одному слову на рядок. Найпростіше: <b>word — переклад</b>.</p>
+        <div class="field">
+          <label for="bulk">Список слів</label>
+          <textarea id="bulk" placeholder="quite — досить, доволі
+stew — рагу
+proper — правильний, справжній"></textarea>
+        </div>
+        <div class="form-actions">
+          <span class="form-note">Порожні та нерозпізнані рядки буде пропущено.</span>
+          <button class="button primary" type="submit">Додати все</button>
+        </div>
+      </form>
+    </div>
+  </section>
+  <section id="panel-verbs" class="panel" hidden="" aria-label="150 неправильних дієслів">
+    <div class="study-shell">
+      <form id="verb-setup" class="verb-setup box" hidden="">
+        <div class="field"><label for="verb-mode">Практика</label><select id="verb-mode"><option value="writing">Вводити V2 і V3</option><option value="cards">Картки</option></select></div>
+        <div class="field"><label for="verb-order">Порядок усіх 150 дієслів</label><select id="verb-order"><option value="sequential">Підряд</option><option value="random">Перемішати</option></select></div>
+        <button class="button primary" type="submit">Почати всі 150</button>
+        <p id="verb-history" class="word-count"></p>
+      </form>
+      <button id="verb-saved-errors" class="button secondary saved-errors" type="button" hidden=""></button>
+      <div id="verb-practice" hidden="">
+        <div class="study-head"><span id="verb-round-label" class="word-count"></span><span id="verb-position" class="word-count"></span></div>
+        <div id="verb-score" class="session-stats verb-score" hidden=""><span>Перевірено <strong id="verb-checked">0</strong></span><span>Правильно <strong id="verb-correct">0</strong></span><span>Помилки <strong id="verb-wrong">0</strong></span></div>
+        <article class="verb-card">
+          <button id="verb-reveal" class="verb-word" type="button" aria-controls="verb-answer" aria-expanded="false"><span class="question-label">VERB / INFINITIVE · V1</span><strong id="verb-question" lang="en"></strong><span id="verb-hint">Натисни, щоб перевірити форми</span></button>
+          <div id="verb-answer" class="verb-answer" hidden="">
+            <div class="verb-forms"><div><span class="question-label">PAST SIMPLE · V2</span><strong id="verb-past" lang="en"></strong></div><div><span class="question-label">PAST PARTICIPLE · V3</span><strong id="verb-pp" lang="en"></strong></div></div>
+            <div class="verb-translation"><span class="question-label">ПЕРЕКЛАД</span><p id="verb-translation"></p><p id="verb-note" class="form-note"></p></div>
+          </div>
+        </article>
+        <form id="verb-input-form" class="box verb-input-form" hidden="">
+          <p class="box-intro">Введи дві форми та перевір себе. Порожня форма — помилка.</p>
+          <div class="verb-inputs"><div class="field"><label for="verb-past-input">Past Simple · V2</label><input id="verb-past-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-describedby="verb-past-result"><p id="verb-past-result" class="field-result"></p></div><div class="field"><label for="verb-pp-input">Past Participle · V3</label><input id="verb-pp-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-describedby="verb-pp-result"><p id="verb-pp-result" class="field-result"></p></div></div>
+          <button id="verb-check" type="submit" class="button secondary">Перевірити</button>
+        </form>
+        <section id="verb-examples" class="box verb-examples" hidden="" aria-label="Приклади вживання"><h2>Приклади</h2><div class="verb-example"><span class="question-label">VERB / INFINITIVE · V1</span><p id="verb-example-v1" lang="en"></p></div><div class="verb-example"><span class="question-label">PAST SIMPLE · V2</span><p id="verb-example-v2" lang="en"></p></div><div class="verb-example"><span class="question-label">PAST PERFECT · HAD + V3</span><p id="verb-example-v3" lang="en"></p></div></section>
+        <div class="verb-navigation"><button id="verb-previous" class="button secondary" type="button">Назад</button><button id="verb-next" class="button primary" type="button">Далі</button></div>
+      </div>
+      <section id="verb-complete" class="box verb-complete" hidden="" aria-labelledby="verb-complete-title"><p class="eyebrow">ПРАКТИКУ ЗАВЕРШЕНО</p><h2 id="verb-complete-title">Набір пройдено!</h2><p id="verb-complete-summary"></p><div class="complete-actions"><button id="verb-retry" class="button primary" type="button" hidden="">Повторити помилки</button><button id="verb-restart" class="button secondary" type="button">Повторити всі 150</button></div></section>
+    </div>
+  </section>
+  <p id="verb-announcement" class="sr-only" role="status" aria-live="polite"></p>
+
+</main>
+
+<footer><span>word cards</span><span>Варіанти відповіді беруться з твого словника автоматично.</span></footer>
+
+<dialog id="settings-dialog" class="settings-dialog">
+  <form method="dialog" class="dialog-card" id="settings-form">
+    <div class="dialog-head">
+      <h2>Налаштування навчання</h2>
+      <button id="settings-close" class="close" value="cancel" aria-label="Закрити">×</button>
+    </div>
+    <fieldset class="settings-group">
+      <legend>Напрямок</legend>
+      <div class="choice-grid">
+        <label class="choice"><input type="radio" name="direction" value="mix" checked=""><span><strong>50 / 50</strong><small>Напрямок змінюється випадково</small></span></label>
+        <label class="choice"><input type="radio" name="direction" value="ua-en"><span><strong>UA → EN</strong><small>З перекладу згадати English</small></span></label>
+        <label class="choice"><input type="radio" name="direction" value="en-ua"><span><strong>EN → UA</strong><small>З English вибрати переклад</small></span></label>
+      </div>
+    </fieldset>
+    <div class="switch-row">
+      <div class="switch-copy"><strong>Розумне повторення</strong><small>Нові слова — першими, помилки — з повторенням. Решта проходять по черзі.</small></div>
+      <label class="switch"><input id="smart-repeat" type="checkbox" checked=""><span class="slider"></span></label>
+    </div>
+    <div class="switch-row"><div class="switch-copy"><strong>Вимова після правильної відповіді</strong><small>Англійське слово або вираз звучить автоматично.</small></div><label class="switch"><input id="speak-correct" type="checkbox" checked=""><span class="slider"></span></label></div><p id="speech-note" class="box-intro"></p>
+    <div class="dialog-actions">
+      <button id="reset-stats" class="button danger" value="noop" type="button">Скинути статистику моїх слів</button>
+      <button class="button primary" value="save">Зберегти</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="edit-dialog" class="edit-dialog">
+  <form method="dialog" class="dialog-card" id="edit-form">
+    <div class="dialog-head">
+      <h2>Редагувати слово</h2>
+      <button class="close" value="cancel" aria-label="Закрити">×</button>
+    </div>
+    <input id="edit-id" type="hidden">
+    <div class="field"><label for="edit-en">English</label><input id="edit-en" required=""></div>
+    <div class="field"><label for="edit-translation">Переклад</label><input id="edit-translation" required=""></div>
+
+    <div class="dialog-actions">
+      <button class="button secondary" value="cancel">Скасувати</button>
+      <button class="button primary" value="save">Зберегти</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+const SEED_RAW = `arise|arose|arisen|виникати, з’являтися
+awake|awoke|awoken|прокидатися, будити
+be|was / were|been|бути
+bear|bore|borne / born|нести, витримувати, народжувати
+beat|beat|beaten|бити
+become|became|become|ставати
+begin|began|begun|починати
+bet|bet|bet|битися об заклад
+bind|bound|bound|зв’язувати
+bite|bit|bitten|кусати, кусатися
+bleed|bled|bled|кровоточити
+blow|blew|blown|дути
+break|broke|broken|ламати
+breed|bred|bred|розводити
+bring|brought|brought|приносити
+build|built|built|будувати
+burn|burnt / burned|burnt / burned|палити, горіти
+burst|burst|burst|вибухати, розриватися
+buy|bought|bought|купувати
+cast|cast|cast|кидати
+catch|caught|caught|ловити
+choose|chose|chosen|вибирати
+come|came|come|приходити
+cost|cost|cost|коштувати
+cut|cut|cut|різати
+dare|dared|dared|сміти, наважуватися
+deal|dealt|dealt|мати справу
+dig|dug|dug|копати, рити
+do|did|done|робити
+draw|drew|drawn|малювати, креслити, тягти
+dream|dreamt|dreamt|мріяти, бачити сон
+drink|drank|drunk|пити
+drive|drove|driven|водити, керувати
+dwell|dwelt|dwelt|жити, мешкати
+eat|ate|eaten|їсти
+fall|fell|fallen|падати
+feed|fed|fed|годувати
+feel|felt|felt|відчувати
+fight|fought|fought|боротися
+find|found|found|знаходити
+fly|flew|flown|літати
+forbid|forbade|forbidden|забороняти
+forecast|forecast|forecast|прогнозувати, передбачати
+foresee|foresaw|foreseen|передбачати
+forget|forgot|forgotten|забувати
+forgive|forgave|forgiven|прощати
+freeze|froze|frozen|заморожувати, замерзати
+get|got|got|отримувати
+give|gave|given|давати
+go|went|gone|ходити, йти
+grow|grew|grown|рости, вирощувати
+hang|hung|hung|вішати, висіти
+have|had|had|мати
+hear|heard|heard|чути
+hide|hid|hidden|ховати, ховатися
+hit|hit|hit|ударяти
+hold|held|held|тримати
+hurt|hurt|hurt|поранити, завдати болю
+keep|kept|kept|тримати, зберігати
+kneel|knelt|knelt|стояти навколішки
+knit|knit / knitted|knit / knitted|в’язати, з’єднувати
+know|knew|known|знати
+lay|laid|laid|класти
+lead|led|led|вести, керувати
+lean|leant / leaned|leant / leaned|нахиляти, нахилятися
+leap|leapt|leapt|стрибати
+learn|learnt|learnt|вчити, вивчати
+leave|left|left|залишати
+lend|lent|lent|позичати комусь
+let|let|let|дозволяти, пускати
+lie|lay|lain|лежати
+light|lit|lit|запалювати
+lose|lost|lost|губити, втрачати
+make|made|made|робити, виготовляти
+mean|meant|meant|означати
+meet|met|met|зустрічати
+mislead|misled|misled|вводити в оману
+misspell|misspelt|misspelt|робити орфографічні помилки
+misunderstand|misunderstood|misunderstood|неправильно розуміти
+overcome|overcame|overcome|долати, перемагати
+partake|partook|partaken|брати участь; споживати їжу чи напої
+pay|paid|paid|платити
+prove|proved|proved / proven|доводити
+put|put|put|класти
+read|read|read|читати
+rebuild|rebuilt|rebuilt|відбудовувати
+retell|retold|retold|переказувати
+rewrite|rewrote|rewritten|переписувати
+rid|rid|rid|звільняти, позбавляти
+ride|rode|ridden|їхати верхи, їздити
+ring|rang|rung|дзвонити
+rise|rose|risen|підніматися, сходити, вставати
+run|ran|run|бігти
+say|said|said|казати
+see|saw|seen|бачити
+seek|sought|sought|шукати
+sell|sold|sold|продавати
+send|sent|sent|відсилати
+set|set|set|ставити, розміщувати
+shake|shook|shaken|трусити
+shine|shone|shone|світити, блищати
+shoot|shot|shot|стріляти
+show|showed|shown / showed|показувати
+shut|shut|shut|закривати, закриватися
+sing|sang|sung|співати
+sink|sank|sunk / sunken|тонути
+sit|sat|sat|сидіти
+sleep|slept|slept|спати
+slide|slid|slid|ковзати
+smell|smelt / smelled|smelt / smelled|відчувати запах
+sow|sowed|sown / sowed|сіяти
+speak|spoke|spoken|розмовляти
+speed|sped|sped|поспішати
+spell|spelt / spelled|spelt / spelled|називати або писати по літерах
+spend|spent|spent|витрачати
+spill|spilt / spilled|spilt / spilled|розливати
+spin|spun|spun|прясти, обертати
+spoil|spoilt / spoiled|spoilt / spoiled|псувати
+spread|spread|spread|поширювати, простягати
+spring|sprang|sprung|стрибати
+stand|stood|stood|стояти
+steal|stole|stolen|красти
+stick|stuck|stuck|прилипати; дотримуватися
+stride|strode|stridden|крокувати
+strike|struck|struck|бити, страйкувати
+string|strung|strung|нанизувати, натягувати
+strive|strove|striven|намагатися, старатися
+sunburn|sunburned|sunburned|обгоріти на сонці
+sweep|swept|swept|підмітати
+swim|swam|swum|плавати
+swing|swung|swung|коливатися, хитати
+take|took|taken|брати
+teach|taught|taught|навчати
+tear|tore|torn|рвати
+tell|told|told|казати, розповідати
+think|thought|thought|думати
+throw|threw|thrown|кидати
+undergo|underwent|undergone|зазнавати
+understand|understood|understood|розуміти
+undo|undid|undone|розв’язувати, розстібати, скасовувати
+upset|upset|upset|засмучувати
+wake|woke|woken|будити, прокидатися
+wear|wore|worn|носити
+weep|wept|wept|плакати
+win|won|won|перемагати
+wind|wound|wound|заводити годинник, намотувати
+withdraw|withdrew|withdrawn|відкликати, знімати кошти
+write|wrote|written|писати
+shrink|shrank|shrunk|стискатися, зменшуватися
+split|split|split|розділяти, розколювати`;
+const SEED = SEED_RAW.trim().split('\n').map((line,index)=>{
+  const [en,past,participle,translation] = line.split('|');
+  return {id:'seed-'+(index+1), en, past, participle, translation, correct:0, wrong:0, streak:0, lastSeen:0};
+});
+
+
+const EXAMPLES = {"arise":{"past":"A problem [[arose]] during the meeting.","perfect":"A problem had [[arisen]] before we arrived.","infinitive":"Problems can [[arise]] at any time."},"awake":{"past":"I [[awoke]] early this morning.","perfect":"She had [[awoken]] before the alarm rang.","infinitive":"I hope to [[awake]] feeling better tomorrow."},"be":{"past":"I [[was]] tired yesterday.","perfect":"I had [[been]] there before we met.","infinitive":"I want to [[be]] a better driver."},"bear":{"past":"She [[bore]] the pain without complaining.","perfect":"She had [[borne]] the pain for hours before help arrived.","infinitive":"I cannot [[bear]] this noise."},"beat":{"past":"Our team [[beat]] them yesterday.","perfect":"We had [[beaten]] that team before the final.","infinitive":"Our team hopes to [[beat]] them this time."},"become":{"past":"She [[became]] a teacher last year.","perfect":"She had [[become]] a teacher before she moved to Kyiv.","infinitive":"She wants to [[become]] a teacher."},"begin":{"past":"The lesson [[began]] at nine.","perfect":"The lesson had [[begun]] before I arrived.","infinitive":"We need to [[begin]] the lesson."},"bet":{"past":"I [[bet]] five euros on the game.","perfect":"He had [[bet]] on the result before the game started.","infinitive":"I do not want to [[bet]] any money."},"bind":{"past":"She [[bound]] the books together.","perfect":"She had [[bound]] the books before she packed them.","infinitive":"We need to [[bind]] these books together."},"bite":{"past":"The dog [[bit]] my shoe.","perfect":"The dog had [[bitten]] my shoe before I noticed.","infinitive":"That dog can [[bite]] you."},"bleed":{"past":"My finger [[bled]] after I cut it.","perfect":"My finger had [[bled]] for a minute before I found a plaster.","infinitive":"A deep cut can [[bleed]] a lot."},"blow":{"past":"The wind [[blew]] all night.","perfect":"The wind had [[blown]] the leaves away before we went outside.","infinitive":"The wind can [[blow]] the leaves away."},"break":{"past":"I [[broke]] a glass yesterday.","perfect":"I had [[broken]] the glass before she came into the kitchen.","infinitive":"Be careful not to [[break]] the glass."},"breed":{"past":"They [[bred]] horses on their farm.","perfect":"They had [[bred]] horses for years before they sold the farm.","infinitive":"They want to [[breed]] horses."},"bring":{"past":"She [[brought]] some food.","perfect":"She had [[brought]] the food before the guests arrived.","infinitive":"Remember to [[bring]] your notebook."},"build":{"past":"They [[built]] a house last year.","perfect":"They had [[built]] the house before winter came.","infinitive":"We want to [[build]] a small house."},"burn":{"past":"I [[burnt]] the toast this morning.","perfect":"I had [[burnt]] the toast before I noticed the smell.","infinitive":"Try not to [[burn]] the toast."},"burst":{"past":"The balloon [[burst]] suddenly.","perfect":"The balloon had [[burst]] before I could catch it.","infinitive":"The balloon might [[burst]]."},"buy":{"past":"I [[bought]] a new book.","perfect":"I had [[bought]] the book before the lesson started.","infinitive":"I want to [[buy]] a new book."},"cast":{"past":"I [[cast]] my fishing line into the lake.","perfect":"I had [[cast]] my line before the boat stopped moving.","infinitive":"I want to [[cast]] my line near the reeds."},"catch":{"past":"We [[caught]] two fish yesterday.","perfect":"We had [[caught]] two fish before it started raining.","infinitive":"We hope to [[catch]] a big fish."},"choose":{"past":"She [[chose]] the blue jacket.","perfect":"She had [[chosen]] the jacket before I arrived.","infinitive":"I need to [[choose]] a jacket."},"come":{"past":"He [[came]] home late.","perfect":"He had [[come]] home before I called.","infinitive":"Would you like to [[come]] with us?"},"cost":{"past":"The tickets [[cost]] fifty euros.","perfect":"The repairs had [[cost]] a lot by the time we sold the car.","infinitive":"The repairs might [[cost]] a lot."},"cut":{"past":"I [[cut]] some bread.","perfect":"I had [[cut]] the bread before we sat down.","infinitive":"I need to [[cut]] the bread."},"dare":{"past":"She [[dared]] to ask a question.","perfect":"She had [[dared]] to ask for help before the lesson ended.","infinitive":"Would you [[dare]] to swim in this cold lake?"},"deal":{"past":"He [[dealt]] with the problem yesterday.","perfect":"He had [[dealt]] with the problem before I called.","infinitive":"We need to [[deal]] with this problem."},"dig":{"past":"We [[dug]] a hole in the garden.","perfect":"We had [[dug]] the hole before it started raining.","infinitive":"We need to [[dig]] a hole."},"do":{"past":"I [[did]] my homework yesterday.","perfect":"I had [[done]] my homework before dinner.","infinitive":"I need to [[do]] my homework."},"draw":{"past":"She [[drew]] a picture of a cat.","perfect":"She had [[drawn]] the picture before the lesson ended.","infinitive":"She wants to [[draw]] a cat."},"dream":{"past":"I [[dreamt]] about the sea last night.","perfect":"I had [[dreamt]] of visiting London before I went there.","infinitive":"I like to [[dream]] about travelling."},"drink":{"past":"I [[drank]] some water.","perfect":"I had [[drunk]] my coffee before she arrived.","infinitive":"I need to [[drink]] more water."},"drive":{"past":"I [[drove]] home yesterday.","perfect":"I had [[driven]] home before she called.","infinitive":"I want to [[drive]] to Kyiv tomorrow."},"dwell":{"past":"They [[dwelt]] in a small village.","perfect":"They had [[dwelt]] there for years before they moved.","infinitive":"They chose to [[dwell]] in a quiet village."},"eat":{"past":"We [[ate]] soup for lunch.","perfect":"We had [[eaten]] lunch before we left.","infinitive":"Would you like to [[eat]] with us?"},"fall":{"past":"He [[fell]] off his bike.","perfect":"He had [[fallen]] before I could help him.","infinitive":"Be careful not to [[fall]]."},"feed":{"past":"I [[fed]] the cat this morning.","perfect":"I had [[fed]] the cat before I left home.","infinitive":"Remember to [[feed]] the cat."},"feel":{"past":"I [[felt]] tired yesterday.","perfect":"I had [[felt]] ill for two days before I called the doctor.","infinitive":"I hope to [[feel]] better tomorrow."},"fight":{"past":"They [[fought]] for their rights.","perfect":"They had [[fought]] for years before the law changed.","infinitive":"They want to [[fight]] for their rights."},"find":{"past":"I [[found]] my keys.","perfect":"I had [[found]] my keys before she called.","infinitive":"I need to [[find]] my keys."},"fly":{"past":"We [[flew]] to Berlin last year.","perfect":"We had [[flown]] to Berlin before we visited Prague.","infinitive":"We want to [[fly]] to Berlin."},"forbid":{"past":"They [[forbade]] smoking in the building.","perfect":"They had [[forbidden]] smoking before the new office opened.","infinitive":"They plan to [[forbid]] smoking here."},"forecast":{"past":"They [[forecast]] rain for Monday.","perfect":"They had [[forecast]] rain before we planned the trip.","infinitive":"It is hard to [[forecast]] the weather."},"foresee":{"past":"She [[foresaw]] the problem.","perfect":"She had [[foreseen]] the problem before it happened.","infinitive":"Nobody can [[foresee]] every problem."},"forget":{"past":"I [[forgot]] his name.","perfect":"I had [[forgotten]] his name before we met again.","infinitive":"Try not to [[forget]] his name."},"forgive":{"past":"She [[forgave]] me for being late.","perfect":"She had [[forgiven]] me before I apologised.","infinitive":"Can you [[forgive]] me?"},"freeze":{"past":"The lake [[froze]] last winter.","perfect":"The lake had [[frozen]] before the snow fell.","infinitive":"The lake might [[freeze]] tonight."},"get":{"past":"I [[got]] a message yesterday.","perfect":"I had [[got]] home before it started raining.","infinitive":"I need to [[get]] home before six."},"give":{"past":"He [[gave]] me a book.","perfect":"He had [[given]] me the book before he left.","infinitive":"I want to [[give]] her a present."},"go":{"past":"We [[went]] to the park.","perfect":"We had [[gone]] home before it started raining.","infinitive":"Would you like to [[go]] fishing?"},"grow":{"past":"The plant [[grew]] quickly.","perfect":"The plant had [[grown]] a lot before we moved it outside.","infinitive":"We want to [[grow]] tomatoes."},"hang":{"past":"I [[hung]] my coat by the door.","perfect":"I had [[hung]] up my coat before the phone rang.","infinitive":"I need to [[hang]] my coat by the door."},"have":{"past":"We [[had]] dinner at seven.","perfect":"We had [[had]] dinner before they arrived.","infinitive":"Would you like to [[have]] some tea?"},"hear":{"past":"I [[heard]] a strange noise.","perfect":"I had [[heard]] that song before she played it.","infinitive":"I want to [[hear]] your story."},"hide":{"past":"The cat [[hid]] under the bed.","perfect":"The cat had [[hidden]] under the bed before the dog came in.","infinitive":"The cat likes to [[hide]] under the bed."},"hit":{"past":"The ball [[hit]] the window.","perfect":"The ball had [[hit]] the window before I could stop it.","infinitive":"Try to [[hit]] the ball."},"hold":{"past":"She [[held]] my hand.","perfect":"She had [[held]] the baby before his mother came back.","infinitive":"Can you [[hold]] my bag?"},"hurt":{"past":"I [[hurt]] my ankle yesterday.","perfect":"I had [[hurt]] my ankle before the trip started.","infinitive":"I do not want to [[hurt]] you."},"keep":{"past":"I [[kept]] the receipt.","perfect":"I had [[kept]] the receipt, so I could return the jacket.","infinitive":"Remember to [[keep]] the receipt."},"kneel":{"past":"He [[knelt]] beside the dog.","perfect":"He had [[knelt]] beside the dog before the vet arrived.","infinitive":"I need to [[kneel]] to reach the lower shelf."},"knit":{"past":"She [[knitted]] a scarf.","perfect":"She had [[knitted]] the scarf before winter came.","infinitive":"She wants to [[knit]] a scarf."},"know":{"past":"I [[knew]] the answer.","perfect":"I had [[known]] him for years before we worked together.","infinitive":"I want to [[know]] the answer."},"lay":{"past":"She [[laid]] the book on the table.","perfect":"She had [[laid]] the book on the table before she left.","infinitive":"I need to [[lay]] the book on the table."},"lead":{"past":"He [[led]] us to the station.","perfect":"He had [[led]] the team for years before he retired.","infinitive":"She wants to [[lead]] the team."},"lean":{"past":"He [[leaned]] against the wall.","perfect":"He had [[leaned]] the ladder against the wall before he climbed it.","infinitive":"You can [[lean]] the ladder against the wall."},"leap":{"past":"The dog [[leapt]] over the fence.","perfect":"The dog had [[leapt]] over the fence before I could stop it.","infinitive":"The dog can [[leap]] over the fence."},"learn":{"past":"I [[learnt]] ten new words.","perfect":"I had [[learnt]] the words before the lesson started.","infinitive":"I want to [[learn]] ten new words."},"leave":{"past":"She [[left]] at eight.","perfect":"She had [[left]] before I arrived.","infinitive":"We need to [[leave]] at eight."},"lend":{"past":"He [[lent]] me his bike.","perfect":"He had [[lent]] me his bike before mine was repaired.","infinitive":"Can you [[lend]] me your bike?"},"let":{"past":"She [[let]] me use her phone.","perfect":"She had [[let]] me borrow her car before I bought my own.","infinitive":"Will you [[let]] me use your phone?"},"lie":{"past":"He [[lay]] on the sofa.","perfect":"He had [[lain]] there for an hour before dinner was ready.","infinitive":"I want to [[lie]] on the sofa."},"light":{"past":"We [[lit]] a fire.","perfect":"We had [[lit]] the fire before it got dark.","infinitive":"We need to [[light]] a fire."},"lose":{"past":"I [[lost]] my keys yesterday.","perfect":"I had [[lost]] my keys before I got home.","infinitive":"Try not to [[lose]] your keys."},"make":{"past":"She [[made]] a cake.","perfect":"She had [[made]] the cake before the guests arrived.","infinitive":"I want to [[make]] a cake."},"mean":{"past":"I [[meant]] every word.","perfect":"I had [[meant]] to call you before I left.","infinitive":"What could this word [[mean]]?"},"meet":{"past":"I [[met]] her at the station.","perfect":"I had [[met]] her before we worked together.","infinitive":"I would like to [[meet]] your friend."},"mislead":{"past":"The sign [[misled]] us.","perfect":"The sign had [[misled]] us before we checked the map.","infinitive":"A wrong sign can [[mislead]] drivers."},"misspell":{"past":"I [[misspelt]] his name.","perfect":"I had [[misspelt]] his name before I checked the email.","infinitive":"It is easy to [[misspell]] this word."},"misunderstand":{"past":"I [[misunderstood]] the question.","perfect":"I had [[misunderstood]] the question before she explained it.","infinitive":"I do not want to [[misunderstand]] you."},"overcome":{"past":"She [[overcame]] her fear.","perfect":"She had [[overcome]] her fear before the interview.","infinitive":"She hopes to [[overcome]] her fear."},"partake":{"past":"We [[partook]] in the celebration.","perfect":"We had [[partaken]] of the meal before the speeches began.","infinitive":"Would you like to [[partake]] in the celebration?"},"pay":{"past":"I [[paid]] for the tickets.","perfect":"I had [[paid]] for the tickets before the price went up.","infinitive":"I need to [[pay]] for the tickets."},"prove":{"past":"The test [[proved]] his idea was right.","perfect":"The test had [[proven]] his idea was right before we published the results.","infinitive":"I want to [[prove]] that my idea works."},"put":{"past":"I [[put]] my phone on the table.","perfect":"I had [[put]] my phone on the table before I left.","infinitive":"You can [[put]] your bag here."},"read":{"past":"I [[read]] a story last night.","perfect":"I had [[read]] the story before the lesson started.","infinitive":"I want to [[read]] this story."},"rebuild":{"past":"They [[rebuilt]] the bridge.","perfect":"They had [[rebuilt]] the bridge before winter came.","infinitive":"They plan to [[rebuild]] the bridge."},"retell":{"past":"She [[retold]] the story.","perfect":"She had [[retold]] the story before I arrived.","infinitive":"Can you [[retell]] the story?"},"rewrite":{"past":"I [[rewrote]] the email.","perfect":"I had [[rewritten]] the email before I sent it.","infinitive":"I need to [[rewrite]] this email."},"rid":{"past":"We [[rid]] the garden of weeds.","perfect":"We had [[rid]] the garden of weeds before we planted the flowers.","infinitive":"We need to [[rid]] the garden of weeds."},"ride":{"past":"I [[rode]] my bike to work.","perfect":"I had [[ridden]] that horse before we went on the trip.","infinitive":"I want to [[ride]] my bike to work."},"ring":{"past":"The phone [[rang]] at midnight.","perfect":"The phone had [[rung]] twice before I answered.","infinitive":"The phone might [[ring]] soon."},"rise":{"past":"The sun [[rose]] at six.","perfect":"The sun had [[risen]] before we left home.","infinitive":"The sun will [[rise]] at six."},"run":{"past":"I [[ran]] five kilometres.","perfect":"I had [[run]] five kilometres before breakfast.","infinitive":"I want to [[run]] five kilometres."},"say":{"past":"She [[said]] hello.","perfect":"She had [[said]] hello before I recognised her.","infinitive":"I want to [[say]] thank you."},"see":{"past":"I [[saw]] a fox yesterday.","perfect":"I had [[seen]] that film before we watched it together.","infinitive":"I would like to [[see]] that film."},"seek":{"past":"He [[sought]] help.","perfect":"He had [[sought]] help before the problem got worse.","infinitive":"You can [[seek]] help from a teacher."},"sell":{"past":"She [[sold]] her old car.","perfect":"She had [[sold]] her car before she moved.","infinitive":"She wants to [[sell]] her car."},"send":{"past":"I [[sent]] an email.","perfect":"I had [[sent]] the email before he called.","infinitive":"I need to [[send]] an email."},"set":{"past":"I [[set]] the alarm for seven.","perfect":"I had [[set]] the alarm before I went to bed.","infinitive":"Remember to [[set]] the alarm."},"shake":{"past":"He [[shook]] my hand.","perfect":"He had [[shaken]] my hand before he introduced himself.","infinitive":"I would like to [[shake]] your hand."},"shine":{"past":"The sun [[shone]] all day.","perfect":"The sun had [[shone]] for hours before the clouds appeared.","infinitive":"The sun will [[shine]] all day."},"shoot":{"past":"She [[shot]] a video yesterday.","perfect":"She had [[shot]] the video before we arrived.","infinitive":"I want to [[shoot]] a short video."},"show":{"past":"He [[showed]] me the photos.","perfect":"He had [[shown]] me the photos before I visited the city.","infinitive":"Can you [[show]] me the photos?"},"shut":{"past":"I [[shut]] the window.","perfect":"I had [[shut]] the window before the rain started.","infinitive":"I need to [[shut]] the window."},"sing":{"past":"She [[sang]] a song.","perfect":"She had [[sung]] that song before the concert.","infinitive":"She wants to [[sing]] a song."},"sink":{"past":"The boat [[sank]] last year.","perfect":"The boat had [[sunk]] before help arrived.","infinitive":"An overloaded boat can [[sink]]."},"sit":{"past":"We [[sat]] by the window.","perfect":"We had [[sat]] there for an hour before the train arrived.","infinitive":"You can [[sit]] by the window."},"sleep":{"past":"I [[slept]] well last night.","perfect":"I had [[slept]] for eight hours before the alarm rang.","infinitive":"I need to [[sleep]] for eight hours."},"slide":{"past":"The cup [[slid]] off the table.","perfect":"The cup had [[slid]] off the table before I could catch it.","infinitive":"The cup might [[slide]] off the table."},"smell":{"past":"I [[smelt]] smoke.","perfect":"I had [[smelt]] smoke before I saw the fire.","infinitive":"Can you [[smell]] the coffee?"},"sow":{"past":"We [[sowed]] seeds in spring.","perfect":"We had [[sown]] the seeds before it started raining.","infinitive":"We plan to [[sow]] the seeds in spring."},"speak":{"past":"I [[spoke]] to her yesterday.","perfect":"I had [[spoken]] to her before the meeting started.","infinitive":"I want to [[speak]] English confidently."},"speed":{"past":"The car [[sped]] down the road.","perfect":"The car had [[sped]] away before I could see its number plate.","infinitive":"You must not [[speed]] on this road."},"spell":{"past":"She [[spelt]] her name for me.","perfect":"She had [[spelt]] her name before I wrote it down.","infinitive":"Can you [[spell]] your name?"},"spend":{"past":"We [[spent]] the weekend at home.","perfect":"We had [[spent]] all our money before the holiday ended.","infinitive":"We want to [[spend]] the weekend at home."},"spill":{"past":"I [[spilt]] my coffee.","perfect":"I had [[spilt]] my coffee before I noticed the stain.","infinitive":"Try not to [[spill]] your coffee."},"spin":{"past":"The wheel [[spun]] quickly.","perfect":"The wheel had [[spun]] for a minute before it stopped.","infinitive":"The wheel needs to [[spin]] freely."},"spoil":{"past":"The rain [[spoilt]] our picnic.","perfect":"The rain had [[spoilt]] our plans before we left home.","infinitive":"Bad weather can [[spoil]] a picnic."},"spread":{"past":"The news [[spread]] quickly.","perfect":"The news had [[spread]] before the meeting started.","infinitive":"Rumours can [[spread]] quickly."},"spring":{"past":"The cat [[sprang]] onto the table.","perfect":"The cat had [[sprung]] onto the table before I noticed.","infinitive":"The cat is ready to [[spring]] onto the table."},"stand":{"past":"We [[stood]] near the door.","perfect":"We had [[stood]] there for ten minutes before the shop opened.","infinitive":"We need to [[stand]] near the door."},"steal":{"past":"Someone [[stole]] my bike.","perfect":"Someone had [[stolen]] my bike before I came outside.","infinitive":"Someone might [[steal]] an unlocked bike."},"stick":{"past":"The label [[stuck]] to my sleeve.","perfect":"The label had [[stuck]] to my sleeve before I noticed it.","infinitive":"This label will [[stick]] to the box."},"stride":{"past":"He [[strode]] into the room.","perfect":"He had [[stridden]] across the room before anyone spoke.","infinitive":"He began to [[stride]] across the room."},"strike":{"past":"Lightning [[struck]] the tree.","perfect":"Lightning had [[struck]] the tree before the storm ended.","infinitive":"Lightning can [[strike]] a tree."},"string":{"past":"She [[strung]] the beads together.","perfect":"She had [[strung]] the beads together before she gave me the necklace.","infinitive":"She wants to [[string]] the beads together."},"strive":{"past":"She [[strove]] to improve her English.","perfect":"She had [[striven]] to improve her English before she moved abroad.","infinitive":"I want to [[strive]] for better results."},"sunburn":{"past":"I [[sunburned]] my shoulders at the beach.","perfect":"I had [[sunburned]] my shoulders before I bought sunscreen.","infinitive":"Strong sunlight can [[sunburn]] your skin."},"sweep":{"past":"I [[swept]] the kitchen floor.","perfect":"I had [[swept]] the floor before the guests arrived.","infinitive":"I need to [[sweep]] the floor."},"swim":{"past":"We [[swam]] in the lake.","perfect":"We had [[swum]] in that lake before we bought a boat.","infinitive":"I want to [[swim]] in the lake."},"swing":{"past":"The door [[swung]] open.","perfect":"The door had [[swung]] open before I heard the noise.","infinitive":"The door can [[swing]] open in the wind."},"take":{"past":"I [[took]] a photo.","perfect":"I had [[taken]] the photo before it got dark.","infinitive":"I want to [[take]] a photo."},"teach":{"past":"She [[taught]] me to swim.","perfect":"She had [[taught]] me to swim before we went to the sea.","infinitive":"Can you [[teach]] me to swim?"},"tear":{"past":"I [[tore]] my shirt.","perfect":"I had [[torn]] my shirt before the party started.","infinitive":"Be careful not to [[tear]] the paper."},"tell":{"past":"He [[told]] me a story.","perfect":"He had [[told]] me the story before we visited the castle.","infinitive":"I want to [[tell]] you a story."},"think":{"past":"I [[thought]] about your idea.","perfect":"I had [[thought]] about your idea before the meeting.","infinitive":"I need to [[think]] about your idea."},"throw":{"past":"She [[threw]] the ball.","perfect":"She had [[thrown]] the ball before I was ready.","infinitive":"Can you [[throw]] me the ball?"},"undergo":{"past":"He [[underwent]] surgery last year.","perfect":"He had [[undergone]] surgery before he started exercising again.","infinitive":"He needs to [[undergo]] surgery."},"understand":{"past":"I [[understood]] the question.","perfect":"I had [[understood]] the question before she explained it again.","infinitive":"I want to [[understand]] this rule."},"undo":{"past":"I [[undid]] the knot.","perfect":"I had [[undone]] the knot before he brought the scissors.","infinitive":"I need to [[undo]] this knot."},"upset":{"past":"The news [[upset]] her.","perfect":"The news had [[upset]] her before I called.","infinitive":"I do not want to [[upset]] her."},"wake":{"past":"I [[woke]] at seven.","perfect":"I had [[woken]] before the alarm rang.","infinitive":"I need to [[wake]] up at seven."},"wear":{"past":"She [[wore]] a blue dress.","perfect":"She had [[worn]] that dress before the party.","infinitive":"I want to [[wear]] my blue shirt."},"weep":{"past":"She [[wept]] when she heard the news.","perfect":"She had [[wept]] for a while before her friend arrived.","infinitive":"The sad story made her want to [[weep]]."},"win":{"past":"Our team [[won]] the match.","perfect":"Our team had [[won]] three matches before the final.","infinitive":"Our team hopes to [[win]] the match."},"wind":{"past":"I [[wound]] the clock.","perfect":"I had [[wound]] the clock before I went to bed.","infinitive":"Remember to [[wind]] the clock."},"withdraw":{"past":"I [[withdrew]] some money.","perfect":"I had [[withdrawn]] the money before the bank closed.","infinitive":"I need to [[withdraw]] some money."},"write":{"past":"I [[wrote]] a letter.","perfect":"I had [[written]] the letter before she called.","infinitive":"I want to [[write]] a letter."},"shrink":{"past":"My shirt [[shrank]] in the wash.","perfect":"My shirt had [[shrunk]] before I realised the water was too hot.","infinitive":"Hot water can [[shrink]] your clothes."},"split":{"past":"We [[split]] the bill.","perfect":"We had [[split]] the bill before we left the restaurant.","infinitive":"We can [[split]] the bill."}};
+const LEGACY_KEY='word-cards-v1', STORAGE_KEY='word-cards-v2', PREFS_KEY='word-cards-v1-prefs';
+const $=id=>document.getElementById(id);
+const q=(sel,root=document)=>root.querySelector(sel);
+const qa=(sel,root=document)=>[...root.querySelectorAll(sel)];
+function uid(){return 'w-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8)}
+function clean(s){return String(s??'').trim().replace(/\s+/g,' ')}
+function normalize(s){return clean(s).toLocaleLowerCase('uk-UA').replace(/[’']/g,"'")}
+const APP_TEMPLATE='<!doctype html>\n'+document.documentElement.outerHTML;
+const FILE_DATA=(()=>{try{return JSON.parse($('word-cards-data').textContent)||{};}catch{return {};}})();
+const SNAPSHOT_ID=typeof FILE_DATA.snapshotId==='string'?FILE_DATA.snapshotId:'wc-dmytro-20261027-portable';
+const BACKUP_KEY=STORAGE_KEY+':'+SNAPSHOT_ID;
+const FILE_HAS_WORDS=Array.isArray(FILE_DATA.words)&&Array.isArray(FILE_DATA.verbs);
+let loadedPayload=null;
+const seedByName=new Map(SEED.map(w=>[normalize(w.en),w]));
+function sanitizeWord(w){
+  if(!w||typeof w!=='object'||!clean(w.en)||!clean(w.translation))return null;
+  const result={id:clean(w.id)||uid(),en:clean(w.en),translation:clean(w.translation),past:clean(w.past),participle:clean(w.participle)};
+  for(const key of ['correct','wrong','streak','lastSeen','formsCorrect','formsWrong','formsStreak','formsLastSeen'])result[key]=Number.isFinite(+w[key])?Math.max(0,+w[key]):0;
+  result.formsMistake=w.formsMistake===true;
+  return result;
+}
+// Match the fixed source list, never guess a word's part of speech.
+function splitVocabulary(incoming,verbRecords=[]){
+  const vocabulary=new Map(), verbMap=new Map(SEED.map(w=>[normalize(w.en),sanitizeWord(w)]));
+  for(const raw of [...incoming,...verbRecords]){
+    const word=sanitizeWord(raw);if(!word)continue;
+    const key=normalize(word.en), seed=seedByName.get(key);
+    if(seed){
+      const previous=verbMap.get(key);
+      // Preserve earlier translation statistics separately from the new form checks.
+      const record={...word,id:seed.id,en:seed.en,past:word.past||seed.past,participle:word.participle||seed.participle};
+      for(const stat of ['correct','wrong','streak','lastSeen','formsCorrect','formsWrong','formsStreak','formsLastSeen'])record[stat]=Math.max(previous[stat],record[stat]);
+      verbMap.set(key,record);
+    }else{
+      const previous=vocabulary.get(key);
+      if(previous)for(const stat of ['correct','wrong','streak','lastSeen'])word[stat]=Math.max(previous[stat],word[stat]);
+      vocabulary.set(key,word);
+    }
+  }
+  const seen=new Set(SEED.map(w=>w.id));
+  const custom=[...vocabulary.values()].map(w=>{if(seen.has(w.id))w.id=uid();seen.add(w.id);return w;});
+  return {version:2,words:custom,verbs:SEED.map(w=>verbMap.get(normalize(w.en)))};
+}
+function loadDatabase(){
+  let backup=null;
+  try{const value=JSON.parse(localStorage.getItem(BACKUP_KEY));if(value?.version===2&&Array.isArray(value.words)&&Array.isArray(value.verbs))backup=value;}catch{}
+  if(FILE_HAS_WORDS||backup){
+    loadedPayload=backup&&(!FILE_HAS_WORDS||backup.revision>FILE_DATA.revision)?backup:FILE_DATA;
+    return splitVocabulary(loadedPayload.words,loadedPayload.verbs);
+  }
+  try{
+    const data=JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(data?.version===2&&Array.isArray(data.words)&&Array.isArray(data.verbs)){loadedPayload=data;return splitVocabulary(data.words,data.verbs);}
+  }catch{}
+  try{
+    const old=JSON.parse(localStorage.getItem(LEGACY_KEY));
+    if(Array.isArray(old)){loadedPayload={version:1};return splitVocabulary(old);}
+  }catch{}
+  return splitVocabulary([]);
+}
+const database=loadDatabase();
+let words=database.words, verbs=database.verbs;
+let dataRevision=Number.isFinite(loadedPayload?.revision)?loadedPayload.revision:0;
+let exportedRevision=FILE_HAS_WORDS?(FILE_DATA.revision||0):loadedPayload?-1:0;
+let copyPrepared=false;
+function saveWords(){
+  dataRevision++;copyPrepared=false;updateSaveStatus();
+  try{localStorage.setItem(BACKUP_KEY,JSON.stringify(snapshotPayload()));return true;}
+  catch{toast('Резерв у браузері недоступний. Натисни «Зберегти HTML» перед закриттям.');return false;}
+}
+function loadPrefs(){
+  let p=loadedPayload?.prefs||{};if(!loadedPayload?.prefs)try{p=JSON.parse(localStorage.getItem(PREFS_KEY))||{};}catch{}
+  return {direction:['mix','ua-en','en-ua'].includes(p.direction)?p.direction:'mix',smart:p.smart!==false,speakCorrect:p.speakCorrect!==false,verbMode:p.verbMode==='cards'?'cards':'writing',verbOrder:p.verbOrder==='random'?'random':'sequential'};
+}
+let prefs=loadPrefs(), workspace='vocabulary', activeTab='study';
+function newWordSession(){return {answered:0,correct:0,current:null,direction:null,locked:false,recent:[],retry:[],queue:[],lastWasRetry:false};}
+let state=newWordSession();
+let verbState={deck:[],index:0,mode:'writing',order:'sequential',attempts:new Map(),drafts:new Map(),revealed:false,retry:false,completed:false};
+let previousPrefs=JSON.stringify(prefs);
+function savePrefs(){const next=JSON.stringify(prefs);if(next!==previousPrefs){previousPrefs=next;saveWords();}}
+function snapshotPayload(){return {version:2,snapshotId:SNAPSHOT_ID,revision:dataRevision,savedAt:new Date().toISOString(),words,verbs,prefs};}
+function updateSaveStatus(){
+  const changed=dataRevision>exportedRevision;
+  $('save-status').textContent=`${words.length} слів · `+(changed?'є зміни, не збережені в HTML':copyPrepared?'копію підготовлено до завантаження':FILE_HAS_WORDS?'слова та статистика є в цьому HTML':'додай або імпортуй свої слова');
+  $('save-html').closest('.file-save').classList.toggle('has-changes',changed);
+}
+function buildPortableHTML(payload,template=APP_TEMPLATE){
+  const safe=JSON.stringify(payload).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
+  const marker=/<script\b(?=[^>]*\bid=["']word-cards-data["'])[^>]*>[\s\S]*?<\/script>/i;
+  if(!marker.test(template))throw Error('missing snapshot container');
+  return template.replace(marker,()=>'<script id="word-cards-data" type="application/json">'+safe+'<'+'/script>');
+}
+$('save-html').addEventListener('click',()=>{
+  try{
+    const content=buildPortableHTML(snapshotPayload()),blob=new Blob([content],{type:'text/html;charset=utf-8'}),a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);a.download=`word-cards-${words.length}-words.html`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    exportedRevision=dataRevision;copyPrepared=true;updateSaveStatus();toast(`Копію з ${words.length} словами передано на завантаження. Збережи її та відкривай для подальшого навчання.`);
+  }catch{toast('Не вдалося створити HTML-копію. Збережи слова через «Експорт» JSON.');}
+});
+window.addEventListener('beforeunload',event=>{if(dataRevision>exportedRevision){event.preventDefault();event.returnValue='';}});
+function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').classList.remove('show'),4000);}
+const speech=window.speechSynthesis;
+const speechSupported=!!speech&&typeof window.SpeechSynthesisUtterance==='function';
+let speakingUtterance=null,speechIssueShown=false;
+function englishVoices(){
+  if(!speechSupported)return [];
+  try{return speech.getVoices().filter(v=>/^en(?:[-_]|$)/i.test(v.lang)).sort((a,b)=>{
+    const score=v=>(v.localService===true?100:0)+(/^en[-_]GB$/i.test(v.lang)?20:/^en[-_]US$/i.test(v.lang)?10:0)+(v.default?1:0);
+    return score(b)-score(a);
+  });}catch{return [];}
+}
+function updateSpeechUI(){
+  $('speak-word').disabled=!speechSupported;$('speak-correct').disabled=!speechSupported;
+  const voice=englishVoices()[0];
+  $('speech-note').textContent=!speechSupported?'Цей браузер не підтримує озвучення. Спробуй інший браузер.':voice?`Голос: ${voice.name} (${voice.lang}). `+(voice.localService?'Працює без інтернету.':'Для цього голосу може знадобитися інтернет.'):'Для офлайн-вимови встанови англійський голос у налаштуваннях мовлення пристрою. Голоси можуть завантажитися після першого натискання.';
+}
+function stopSpeech(){
+  speakingUtterance=null;
+  if(speechSupported)try{speech.cancel();}catch{}
+  $('speak-word').setAttribute('aria-busy','false');
+}
+function speechIssue(message,manual){if(manual||!speechIssueShown){toast(message);speechIssueShown=true;}}
+function sayEnglish(text,manual=false){
+  if(!speechSupported){speechIssue('Озвучення недоступне в цьому браузері.',manual);return;}
+  const value=clean(text);if(!value)return;
+  let available=[];try{available=speech.getVoices();}catch{}
+  const voice=englishVoices()[0];
+  if(available.length&&!voice){speechIssue('Додай англійський голос у налаштуваннях мовлення пристрою.',manual);return;}
+  if(voice&&voice.localService===false&&navigator.onLine===false){speechIssue('Для офлайн-вимови потрібен установлений англійський голос.',manual);return;}
+  stopSpeech();
+  const utterance=new window.SpeechSynthesisUtterance(value);
+  utterance.lang=voice?.lang||'en-GB';if(voice)utterance.voice=voice;
+  utterance.rate=.9;utterance.pitch=1;utterance.volume=1;speakingUtterance=utterance;
+  utterance.onstart=()=>{if(speakingUtterance===utterance)$('speak-word').setAttribute('aria-busy','true');};
+  utterance.onend=()=>{if(speakingUtterance===utterance){speakingUtterance=null;$('speak-word').setAttribute('aria-busy','false');}};
+  utterance.onerror=event=>{
+    if(speakingUtterance!==utterance)return;speakingUtterance=null;$('speak-word').setAttribute('aria-busy','false');
+    if(!['canceled','interrupted'].includes(event.error))speechIssue('Не вдалося озвучити. Натисни «Прослухати ще раз» або перевір англійський голос пристрою.',manual);
+  };
+  try{speech.speak(utterance);}catch{speakingUtterance=null;speechIssue('Не вдалося озвучити. Спробуй «Прослухати ще раз».',manual);}
+}
+$('speak-word').addEventListener('click',()=>{if(state.locked&&state.current)sayEnglish(state.current.en,true);});
+if(speechSupported)speech.addEventListener('voiceschanged',updateSpeechUI);
+window.addEventListener('pagehide',stopSpeech);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopSpeech();});
+function shuffle(arr){const out=[...arr];for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]];}return out;}
+function setWorkspace(name){
+  stopSpeech();
+  workspace=name;
+  for(const b of qa('[data-workspace]')){const active=b.dataset.workspace===name;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));}
+  const vocabulary=name==='vocabulary';
+  $('vocabulary-tabs').hidden=!vocabulary;
+  $('settings-open').setAttribute('aria-controls',vocabulary?'settings-dialog':'verb-setup');
+  $('settings-open').setAttribute('aria-expanded',String(!vocabulary&&!$('verb-setup').hidden));
+  document.body.classList.toggle('verbs-active',!vocabulary);
+  $('panel-verbs').hidden=vocabulary;
+  for(const tab of ['study','words','add'])$('panel-'+tab).hidden=!vocabulary||tab!==activeTab;
+  $('page-title').textContent=vocabulary?'Мої слова':'150 дієслів';
+  $('page-intro').textContent=vocabulary?'Додавай незнайомі слова й повторюй їх в обидва боки.':'Усі 150 дієслів. Три форми, переклад і приклади — окремо від твоєї лексики.';
+  if(!vocabulary&&!verbState.deck.length)startVerbRound(verbs,false,false);
+}
+function setTab(name){
+  activeTab=name;setWorkspace('vocabulary');
+  for(const tab of qa('.tab'))tab.setAttribute('aria-selected',String(tab.dataset.tab===name));
+  if(name==='words')renderWordList();
+  if(name==='study'&&!state.current)createQuestion();
+  if(name==='add')$('new-en').focus({preventScroll:true});
+}
+qa('[data-workspace]').forEach(b=>b.addEventListener('click',()=>setWorkspace(b.dataset.workspace)));
+qa('.tab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+qa('[data-tab-link]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();setTab(b.dataset.tabLink);}));
+function translationParts(text){return String(text||'').split(/[,;\/]+/).map(x=>normalize(x).replace(/\([^)]*\)/g,'').trim()).filter(Boolean);}
+function overlaps(a,b){const A=new Set(translationParts(a.translation));return translationParts(b.translation).some(x=>A.has(x));}
+function buildWordQueue(){
+  let pool=shuffle(words);
+  if(prefs.smart)pool.sort((a,b)=>{
+    const priority=w=>w.lastSeen===0?0:(w.wrong>0&&w.streak<3)?1:2;
+    return priority(a)-priority(b)||a.lastSeen-b.lastSeen;
+  });
+  // Every word gets a turn; errors can return between those turns.
+  if(pool.length>1&&pool[0]?.id===state.current?.id)pool.push(pool.shift());
+  state.queue=pool.map(w=>w.id);
+}
+function pickTarget(){
+  if(!words.length)return null;
+  if(!state.lastWasRetry){
+    const due=state.retry.findIndex(x=>x.due<=state.answered&&!state.recent.slice(-2).includes(x.id)&&words.some(w=>w.id===x.id));
+    if(due>=0){const [item]=state.retry.splice(due,1);state.lastWasRetry=true;return words.find(w=>w.id===item.id);}
+  }
+  state.lastWasRetry=false;
+  state.queue=state.queue.filter(id=>words.some(w=>w.id===id));
+  if(!state.queue.length)buildWordQueue();
+  const id=state.queue.shift();
+  return words.find(w=>w.id===id);
+}
+function distractorsFor(target,direction){
+  let pool=words.filter(w=>w.id!==target.id);
+  if(direction==='en-ua')pool=pool.filter(w=>!overlaps(target,w));
+  const seen=new Set(),chosen=[];
+  for(const w of shuffle(pool)){
+    const value=direction==='ua-en'?normalize(w.en):normalize(w.translation);
+    if(!value||seen.has(value))continue;seen.add(value);chosen.push(w);if(chosen.length===3)break;
+  }
+  return chosen;
+}
+function createQuestion(){
+  stopSpeech();
+  $('vocab-empty').hidden=words.length>=2;$('vocab-training').hidden=words.length<2;
+  if(words.length<2){state.current=null;state.locked=true;$('empty-description').textContent=words.length?'У словнику одне слово. Додай ще хоча б одне для вибору варіантів відповіді.':'Додай слова з книги або імпортуй попередню резервну копію. Стартові 150 дієслів навчаються окремо.';return;}
+  const target=pickTarget();if(!target)return;
+  const direction=prefs.direction==='mix'?(Math.random()<.5?'ua-en':'en-ua'):prefs.direction;
+  const options=shuffle([target,...distractorsFor(target,direction)]);
+  state.current=target;state.direction=direction;state.locked=false;
+  state.recent.push(target.id);if(state.recent.length>7)state.recent.shift();
+  $('feedback').hidden=true;$('quiz-bottom').hidden=false;$('forms').replaceChildren();
+  $('question-label').textContent=direction==='ua-en'?'ПЕРЕКЛАД → ENGLISH':'ENGLISH → ПЕРЕКЛАД';
+  $('question').textContent=direction==='ua-en'?target.translation:target.en;
+  $('question-count').textContent=words.length+' слів';
+  $('answers').replaceChildren(...options.map((word,index)=>{
+    const b=document.createElement('button');b.className='answer';b.type='button';b.dataset.id=word.id;
+    const key=document.createElement('span');key.className='answer-key';key.textContent=String(index+1);
+    const value=document.createElement('span');value.textContent=direction==='ua-en'?word.en:word.translation;
+    b.append(key,value);b.addEventListener('click',()=>answer(word.id));return b;
+  }));
+}
+function answer(selectedId,unknown=false){
+  if(state.locked||!state.current)return;
+  state.locked=true;const target=state.current,correct=selectedId===target.id&&!unknown;
+  state.answered++;target.lastSeen=Date.now();
+  if(correct){state.correct++;target.correct++;target.streak++;}
+  else{target.wrong++;target.streak=0;if(!state.retry.some(x=>x.id===target.id))state.retry.push({id:target.id,due:state.answered+4});}
+  saveWords();updateSessionStats();
+  for(const b of qa('.answer',$('answers'))){b.disabled=true;if(b.dataset.id===target.id)b.classList.add('correct');else if(!unknown&&b.dataset.id===selectedId)b.classList.add('wrong');}
+  $('feedback-status').textContent=correct?'✓ Правильно':'Правильна відповідь';$('feedback-status').className='feedback-status '+(correct?'ok':'bad');
+  $('feedback-answer').textContent=state.direction==='ua-en'?target.en:target.translation;
+  $('quiz-bottom').hidden=true;$('feedback').hidden=false;$('next-question').focus({preventScroll:true});
+  $('speak-word').setAttribute('aria-label','Прослухати англійською: '+target.en);
+  if(correct&&prefs.speakCorrect)sayEnglish(target.en);
+}
+function updateSessionStats(){
+  $('answered-count').textContent=state.answered;$('correct-count').textContent=state.correct;
+  const acc=state.answered?Math.round(state.correct/state.answered*100):null;
+  $('accuracy').textContent=acc===null?'—':acc+'%';$('accuracy-bar').style.width=(acc||0)+'%';
+}
+function restartSession(){state=newWordSession();updateSessionStats();createQuestion();}
+$('dont-know').addEventListener('click',()=>answer('',true));$('next-question').addEventListener('click',createQuestion);
+$('restart-session').addEventListener('click',()=>{restartSession();toast('Нова сесія слів');});
+function renderWordList(){
+  const text=normalize($('search').value),filtered=[...words].reverse().filter(w=>!text||normalize(w.en).includes(text)||normalize(w.translation).includes(text));
+  $('word-count').textContent=`${filtered.length} з ${words.length} слів`;$('word-empty').hidden=filtered.length!==0;
+  const tbody=$('word-list');tbody.replaceChildren();
+  for(const w of filtered){
+    const tr=document.createElement('tr'),en=document.createElement('td');en.className='word-en';en.textContent=w.en;
+    const translation=document.createElement('td');translation.textContent=w.translation;
+    const stat=document.createElement('td');stat.className='stat-mini';stat.textContent=`✓ ${w.correct} · ✕ ${w.wrong}`;
+    const actions=document.createElement('td'),wrap=document.createElement('div');wrap.className='row-actions';
+    const edit=document.createElement('button');edit.className='icon-btn';edit.type='button';edit.textContent='Змінити';edit.addEventListener('click',()=>openEdit(w.id));
+    const del=document.createElement('button');del.className='icon-btn delete';del.type='button';del.textContent='×';del.setAttribute('aria-label','Видалити '+w.en);del.addEventListener('click',()=>deleteWord(w.id));
+    wrap.append(edit,del);actions.append(wrap);tr.append(en,translation,stat,actions);tbody.append(tr);
+  }
+}
+$('search').addEventListener('input',renderWordList);
+function upsertWord(data){
+  const en=clean(data.en),translation=clean(data.translation);if(!en||!translation)return {ok:false};
+  if(seedByName.has(normalize(en)))return {ok:false,reserved:true};
+  let word=words.find(w=>normalize(w.en)===normalize(en)),updated=!!word;
+  if(word){word.en=en;word.translation=translation;}
+  else{word=sanitizeWord({...data,id:uid(),en,translation});words.push(word);}
+  state.queue=[word.id,...state.queue.filter(id=>id!==word.id)];
+  return {ok:true,updated,word};
+}
+$('add-form').addEventListener('submit',e=>{
+  e.preventDefault();const result=upsertWord(Object.fromEntries(new FormData(e.currentTarget).entries()));
+  if(!result.ok){if(result.reserved)toast('Це дієслово вже є в окремому наборі «150 дієслів».');return;}
+  saveWords();e.currentTarget.reset();renderWordList();toast(result.updated?'Слово оновлено':'Слово додано. Воно буде серед перших у повторенні.');$('new-en').focus();
+});
+function parseBulkLine(line){
+  if(!line.trim())return null;
+  if(line.includes('\t')){const parts=line.split('\t').map(clean);if(parts.length>=4)return {en:parts[0],past:parts[1],participle:parts[2],translation:parts.slice(3).join(' ')};if(parts.length>=2)return {en:parts[0],translation:parts.slice(1).join(' ')};}
+  const match=line.match(/^(.+?)\s+(?:—|–|-|=>)\s+(.+)$/);return match?{en:clean(match[1]),translation:clean(match[2])}:null;
+}
+$('bulk-form').addEventListener('submit',e=>{
+  e.preventDefault();let added=0,updated=0,skipped=0,reserved=0;const newIds=[];
+  for(const line of $('bulk').value.split(/\r?\n/)){
+    if(!line.trim())continue;const data=parseBulkLine(line);if(!data){skipped++;continue;}
+    const r=upsertWord(data);if(!r.ok){r.reserved?reserved++:skipped++;continue;}r.updated?updated++:added++;newIds.push(r.word.id);
+  }
+  const unique=[...new Set(newIds)];state.queue=[...unique,...state.queue.filter(id=>!unique.includes(id))];
+  saveWords();$('bulk').value='';renderWordList();toast(`Додано: ${added} · оновлено: ${updated}${reserved?' · уже в «150 дієслів»: '+reserved:''}${skipped?' · пропущено: '+skipped:''}`);
+});
+function openEdit(id){const w=words.find(x=>x.id===id);if(!w)return;$('edit-id').value=w.id;$('edit-en').value=w.en;$('edit-translation').value=w.translation;$('edit-dialog').showModal();$('edit-en').focus();}
+$('edit-form').addEventListener('submit',e=>{
+  if(e.submitter?.value!=='save')return;e.preventDefault();const w=words.find(x=>x.id===$('edit-id').value);if(!w)return;
+  const en=clean($('edit-en').value),translation=clean($('edit-translation').value);if(!en||!translation)return;
+  if(seedByName.has(normalize(en))){toast('Це дієслово має окремий розділ «150 дієслів».');return;}
+  if(words.some(x=>x.id!==w.id&&normalize(x.en)===normalize(en))){toast('Таке English-слово вже є');return;}
+  w.en=en;w.translation=translation;saveWords();$('edit-dialog').close();renderWordList();if(state.current?.id===w.id)createQuestion();toast('Зміни збережено');
+});
+function deleteWord(id){
+  const w=words.find(x=>x.id===id);if(!w||!confirm(`Видалити «${w.en}» з моїх слів?`))return;
+  words=words.filter(x=>x.id!==id);saveWords();renderWordList();if(state.current?.id===id||words.length<2)createQuestion();toast('Слово видалено');
+}
+$('export').addEventListener('click',()=>{
+  const payload={version:2,exportedAt:new Date().toISOString(),words,verbs,prefs};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='word-cards-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('Слова, дієслова та статистику експортовано');
+});
+$('import-button').addEventListener('click',()=>$('import-file').click());$('empty-import').addEventListener('click',()=>$('import-file').click());
+function readBackup(parsed){
+  const incoming=Array.isArray(parsed)?parsed:parsed?.words;
+  if(!Array.isArray(incoming))throw Error('invalid backup');
+  const records=parsed?.version===2?parsed.verbs:[];
+  if(parsed?.version===2&&!Array.isArray(records))throw Error('invalid verbs');
+  if(![...incoming,...(records||[])].some(sanitizeWord)&&incoming.length)throw Error('empty invalid backup');
+  return splitVocabulary(incoming,records||[]);
+}
+$('import-file').addEventListener('change',async e=>{
+  const file=e.target.files?.[0];if(!file)return;
+  try{
+    const next=readBackup(JSON.parse(await file.text()));
+    if(!confirm(`Імпортувати ${next.words.length} слів і 150 дієслів зі статистикою? Поточні дані буде замінено резервною копією.`))return;
+    words=next.words;verbs=next.verbs;saveWords();restartSession();renderWordList();verbState.deck=[];verbState.completed=false;
+    $('verb-practice').hidden=true;$('verb-complete').hidden=true;updateVerbHistory();toast('Імпортовано. Слова та 150 дієслів розділено.');
+  }catch{toast('Не вдалося прочитати цей JSON');}finally{e.target.value='';}
+});
+function syncSettingsUI(){const radio=q(`input[name="direction"][value="${prefs.direction}"]`);if(radio)radio.checked=true;$('smart-repeat').checked=prefs.smart;$('speak-correct').checked=prefs.speakCorrect;$('verb-mode').value=prefs.verbMode;$('verb-order').value=prefs.verbOrder;updateSpeechUI();}
+$('settings-open').addEventListener('click',()=>{
+  if(workspace==='verbs'){$('verb-setup').hidden=!$('verb-setup').hidden;$('settings-open').setAttribute('aria-expanded',String(!$('verb-setup').hidden));return;}
+  syncSettingsUI();$('settings-dialog').showModal();
+});
+$('settings-form').addEventListener('submit',e=>{
+  if(e.submitter?.value!=='save')return;e.preventDefault();prefs.direction=q('input[name="direction"]:checked',$('settings-form')).value;prefs.smart=$('smart-repeat').checked;prefs.speakCorrect=$('speak-correct').checked;savePrefs();$('settings-dialog').close();state.queue=[];createQuestion();toast('Налаштування змінено. Збережи HTML, щоб перенести їх у файл.');
+});
+$('reset-stats').addEventListener('click',()=>{if(!confirm('Скинути статистику лише моїх слів? Статистика 150 дієслів залишиться.'))return;words.forEach(w=>{w.correct=0;w.wrong=0;w.streak=0;w.lastSeen=0;});saveWords();restartSession();toast('Статистику моїх слів скинуто');});
+
+function updateVerbHistory(){
+  const total=key=>verbs.reduce((sum,w)=>sum+w[key],0);
+  const old=total('correct')+total('wrong');
+  $('verb-history').textContent=`Практика форм: ✓ ${total('formsCorrect')} · ✕ ${total('formsWrong')}`+(old?`. Попередня статистика перекладу збережена: ✓ ${total('correct')} · ✕ ${total('wrong')}.`:'.');
+  const errors=verbs.filter(w=>w.formsMistake);
+  $('verb-saved-errors').hidden=$('verb-mode').value!=='writing'||!errors.length;
+  $('verb-saved-errors').textContent=`Повторити збережені помилки (${errors.length})`;
+}
+function startVerbRound(pool=verbs,retry=false,focus=true){
+  if(!pool.length)return;
+  prefs.verbMode=$('verb-mode').value;prefs.verbOrder=$('verb-order').value;savePrefs();
+  verbState={deck:prefs.verbOrder==='random'?shuffle(pool):[...pool],index:0,mode:prefs.verbMode,order:prefs.verbOrder,attempts:new Map(),drafts:new Map(),revealed:false,retry,completed:false};
+  $('verb-setup').hidden=true;$('settings-open').setAttribute('aria-expanded','false');
+  $('verb-practice').hidden=false;$('verb-complete').hidden=true;renderVerb(focus);updateVerbHistory();
+}
+function formCorrect(value,expected){const accepted=expected.split('/').map(normalize),entered=value.split('/').map(normalize);return entered.length>0&&entered.every(part=>part&&accepted.includes(part));}
+function currentVerb(){return verbState.deck[verbState.index];}
+function gradeVerb(){
+  if(verbState.mode!=='writing'||verbState.attempts.has(currentVerb().id))return;
+  const word=currentVerb(),past=$('verb-past-input').value,participle=$('verb-pp-input').value;
+  const result={past,participle,pastOK:formCorrect(past,word.past),ppOK:formCorrect(participle,word.participle)};result.correct=result.pastOK&&result.ppOK;
+  verbState.attempts.set(word.id,result);word.formsLastSeen=Date.now();word.formsMistake=!result.correct;
+  if(result.correct){word.formsCorrect++;word.formsStreak++;}else{word.formsWrong++;word.formsStreak=0;}
+  saveWords();updateVerbHistory();
+}
+function renderExample(id,text){
+  const el=$(id);el.replaceChildren();const parts=text.split(/\[\[(.*?)\]\]/);
+  for(let i=0;i<parts.length;i++){if(i%2){const strong=document.createElement('strong');strong.textContent=parts[i];el.append(strong);}else el.append(document.createTextNode(parts[i]));}
+}
+function renderVerb(focus=false){
+  const word=currentVerb(),attempt=verbState.attempts.get(word.id),draft=verbState.drafts.get(word.id);
+  verbState.revealed=!!attempt;
+  $('verb-question').textContent=word.en;$('verb-reveal').disabled=!!attempt;$('verb-reveal').setAttribute('aria-expanded',String(!!attempt));
+  $('verb-answer').hidden=!attempt;$('verb-examples').hidden=!attempt;
+  $('verb-past').textContent=word.past;$('verb-pp').textContent=word.participle;$('verb-translation').textContent=word.translation;
+  $('verb-note').textContent=word.en==='bear'?'Born — про народження (be born); borne — в інших значеннях.':word.en==='read'?'Вимова: V1 — [riːd], V2 та V3 — [red].':'';$('verb-note').hidden=!$('verb-note').textContent;
+  const examples=EXAMPLES[word.en];renderExample('verb-example-v1',examples.infinitive);renderExample('verb-example-v2',examples.past);renderExample('verb-example-v3',examples.perfect);
+  $('verb-input-form').hidden=verbState.mode!=='writing';$('verb-check').hidden=!!attempt;
+  for(const [field,key,okKey] of [['past','past','pastOK'],['pp','participle','ppOK']]){
+    const input=$('verb-'+field+'-input'),feedback=$('verb-'+field+'-result');
+    input.value=attempt?.[key]??draft?.[key]??'';input.readOnly=!!attempt;input.classList.remove('is-correct','is-wrong');input.removeAttribute('aria-invalid');feedback.textContent='';feedback.className='field-result';
+    if(attempt){const ok=attempt[okKey];input.classList.add(ok?'is-correct':'is-wrong');input.setAttribute('aria-invalid',String(!ok));feedback.classList.add(ok?'ok':'bad');feedback.textContent=ok?'✓ Правильно':(input.value.trim()?'✕ Правильно: ':'— Не згадав. Правильно: ')+word[key];}
+  }
+  const wrong=[...verbState.attempts.values()].filter(x=>!x.correct).length;
+  $('verb-score').hidden=verbState.mode!=='writing';$('verb-checked').textContent=verbState.attempts.size+' / '+verbState.deck.length;$('verb-correct').textContent=verbState.attempts.size-wrong;$('verb-wrong').textContent=wrong;
+  $('verb-position').textContent=(verbState.index+1)+' / '+verbState.deck.length;
+  $('verb-round-label').textContent=(verbState.retry?'Повторення помилок':'Усі 150 дієслів')+' · '+(verbState.order==='random'?'Перемішано':'Підряд');
+  $('verb-previous').disabled=verbState.index===0;$('verb-next').textContent=verbState.index===verbState.deck.length-1?'Завершити':'Далі';
+  if(focus){const target=$(attempt?'verb-next':verbState.mode==='writing'?'verb-past-input':'verb-reveal');target.focus({preventScroll:true});target.scrollIntoView({block:'nearest',behavior:'instant'});}
+}
+function revealVerb(){
+  if(!verbState.deck.length||verbState.completed||verbState.revealed)return;
+  gradeVerb();renderVerb(false);verbState.revealed=true;$('verb-answer').hidden=false;$('verb-examples').hidden=false;$('verb-reveal').disabled=true;$('verb-reveal').setAttribute('aria-expanded','true');
+  $('verb-next').focus({preventScroll:true});const word=currentVerb();$('verb-announcement').textContent=`${word.en}: ${word.past}; ${word.participle}. ${word.translation}.`;
+}
+function failedVerbs(){return verbState.deck.filter(w=>verbState.attempts.get(w.id)?.correct===false);}
+function moveVerb(direction){
+  if(!verbState.deck.length||verbState.completed)return;
+  const word=currentVerb();verbState.drafts.set(word.id,{past:$('verb-past-input').value,participle:$('verb-pp-input').value});
+  if(direction===1)gradeVerb();
+  if(direction===1&&verbState.index===verbState.deck.length-1){
+    verbState.completed=true;$('verb-practice').hidden=true;$('verb-complete').hidden=false;const wrong=failedVerbs().length;
+    $('verb-complete-summary').textContent=verbState.mode==='writing'?`Перевірено ${verbState.attempts.size} із ${verbState.deck.length}. Правильно: ${verbState.attempts.size-wrong}. Помилки: ${wrong}.`:`Ти переглянув ${verbState.deck.length} дієслів.`;
+    $('verb-retry').hidden=verbState.mode!=='writing'||!wrong;$('verb-retry').textContent=`Повторити помилки (${wrong})`;$(!$('verb-retry').hidden?'verb-retry':'verb-restart').focus({preventScroll:true});return;
+  }
+  verbState.index=Math.max(0,Math.min(verbState.deck.length-1,verbState.index+direction));renderVerb(true);
+}
+$('verb-setup').addEventListener('submit',e=>{e.preventDefault();startVerbRound();});
+$('verb-mode').addEventListener('change',updateVerbHistory);
+$('verb-input-form').addEventListener('submit',e=>{e.preventDefault();revealVerb();});$('verb-reveal').addEventListener('click',revealVerb);
+$('verb-past-input').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();$('verb-pp-input').focus();}});
+$('verb-previous').addEventListener('click',()=>moveVerb(-1));$('verb-next').addEventListener('click',()=>moveVerb(1));
+$('verb-retry').addEventListener('click',()=>startVerbRound(failedVerbs(),true));$('verb-restart').addEventListener('click',()=>startVerbRound());
+$('verb-saved-errors').addEventListener('click',()=>startVerbRound(verbs.filter(w=>w.formsMistake),true));
+document.addEventListener('keydown',e=>{
+  if($('settings-dialog').open||$('edit-dialog').open||e.altKey||e.ctrlKey||e.metaKey||['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;
+  if(workspace==='vocabulary'&&activeTab==='study'&&words.length>=2){
+    if(/^[1-4]$/.test(e.key)&&!state.locked){const b=qa('.answer',$('answers'))[Number(e.key)-1];if(b){e.preventDefault();b.click();}}
+    else if(e.key==='Enter'&&state.locked&&e.target===document.body){e.preventDefault();createQuestion();}
+  }else if(workspace==='verbs'&&!verbState.completed&&verbState.deck.length){
+    if(e.key==='ArrowRight'){e.preventDefault();moveVerb(1);}if(e.key==='ArrowLeft'){e.preventDefault();moveVerb(-1);}
+    if(e.code==='Space'&&e.target===document.body){e.preventDefault();revealVerb();}
+  }
+});
+syncSettingsUI();updateSessionStats();createQuestion();renderWordList();updateVerbHistory();updateSaveStatus();
+
+</script></body></html>
